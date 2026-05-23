@@ -6,15 +6,7 @@ const supabaseUrl =
 const supabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-export const supabase =
-  globalThis.supabase ??
-  createClient(
-    supabaseUrl,
-    supabaseAnonKey
-  );
-
-if (process.env.NODE_ENV !== "production") {
-
-  // @ts-ignore
-  globalThis.supabase = supabase;
-}
+export const supabase = createClient(
+  supabaseUrl,
+  supabaseAnonKey
+);
