@@ -1,10 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
+
 import { useParams } from "next/navigation";
-import toast from "react-hot-toast";
-import { products } from "@/data/products";
+
+import { supabase } from "@/lib/supabase";
+
 import { useCart } from "@/context/CartContext";
+
+import toast from "react-hot-toast";
 
 export default function ProductPage() {
 
@@ -14,72 +20,98 @@ export default function ProductPage() {
 
   const { addToCart } = useCart();
 
-  const product = products.find(
-    (item) => item.slug === slug
-  );
+  const [product, setProduct] =
+    useState<any>(null);
+
+  useEffect(() => {
+
+    async function fetchProduct() {
+
+      const { data, error } =
+        await supabase
+          .from("products")
+          .select("*")
+          .eq("slug", slug)
+          .single();
+
+      if (error) {
+
+        console.log(error);
+
+      } else {
+
+        setProduct(data);
+      }
+    }
+
+    if (slug) {
+
+      fetchProduct();
+    }
+
+  }, [slug]);
 
   if (!product) {
+
     return (
-      <main className="min-h-screen bg-black text-white flex items-center justify-center">
-        <h1 className="text-4xl font-bold">
-          Product Not Found
-        </h1>
-      </main>
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+
+        Loading...
+
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black text-white p-10">
+    <main className="min-h-screen bg-black text-white px-6 py-16">
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
 
-        {/* Product Image */}
-        <div className="w-full h-[500px] overflow-hidden rounded-3xl">
+        <div className="bg-gray-900 rounded-3xl p-10">
 
           <Image
-  src={product.image}
-  alt={product.title}
-  width={800}
-  height={500}
-  loading="eager"
-  className="w-full object-cover h-auto"
-/>
+            src={product.image}
+            alt={product.title}
+            width={500}
+            height={500}
+            className="w-full h-auto object-contain"
+            priority
+          />
 
         </div>
 
-        {/* Product Details */}
         <div>
 
-          <h1 className="text-5xl font-bold">
-            {product.title}
-          </h1>
+          <p className="text-yellow-400 text-lg mb-4">
 
-          <p className="text-4xl font-bold mt-6">
-            ₹{product.price}
+            {product.category}
+
           </p>
 
-          <p className="text-gray-400 text-lg mt-8 leading-relaxed">
-            {product.description}
+          <h1 className="text-5xl font-extrabold leading-tight">
+
+            {product.title}
+
+          </h1>
+
+          <p className="text-4xl font-bold mt-8">
+
+            ₹{product.price}
+
           </p>
 
           <button
             onClick={() => {
 
-  addToCart({
-    id: product.id,
-    title: product.title,
-    price: product.price,
-    image: product.image,
-    slug: product.slug,
-    quantity: 1,
-  });
+              addToCart(product);
 
-  toast.success("Product added to cart");
-
-}}
-            className="mt-10 bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition"
+              toast.success("Added to cart");
+            }}
+            className="mt-10 bg-yellow-400 text-black px-8 py-4 rounded-xl font-bold hover:bg-yellow-300 transition"
           >
-            Add to Cart
+
+            Add To Cart
+
           </button>
 
         </div>

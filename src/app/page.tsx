@@ -1,12 +1,12 @@
 "use client";
-
-import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import CategoryCard from "@/components/CategoryCard";
 
-import { products } from "@/data/products";
+
 
 export default function Home() {
 
@@ -16,7 +16,33 @@ export default function Home() {
     useState("All");
 
   const [sortOption, setSortOption] =
-  useState("default");  
+  useState("default");
+
+  const [products, setProducts] =
+  useState<any[]>([]);
+  
+  useEffect(() => {
+
+  async function fetchProducts() {
+
+    const { data, error } =
+      await supabase
+        .from("products")
+        .select("*");
+
+    if (error) {
+
+      console.log(error);
+
+    } else {
+
+      setProducts(data);
+    }
+  }
+
+  fetchProducts();
+
+}, []);
 
   const filteredProducts = products
   .filter((product) => {
