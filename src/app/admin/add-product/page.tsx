@@ -1,4 +1,5 @@
 "use client";
+import { supabase } from "@/lib/supabase";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -10,17 +11,46 @@ export default function AddProductPage() {
   const [category, setCategory] = useState("");
   const [image, setImage] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(
+  e: React.FormEvent
+) {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    toast.success("Product added successfully");
+  const slug =
+    title
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+  const { error } =
+    await supabase
+      .from("products")
+      .insert([
+        {
+          title,
+          price,
+          image,
+          slug,
+          category,
+        },
+      ]);
+
+  if (error) {
+
+    console.log(error);
+
+    alert("Failed to add product");
+
+  } else {
+
+    alert("Product added successfully");
 
     setTitle("");
     setPrice("");
-    setCategory("");
     setImage("");
+    setCategory("");
   }
+}
 
   return (
 

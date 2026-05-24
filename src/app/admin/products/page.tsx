@@ -1,137 +1,119 @@
 "use client";
-import ProtectedRoute from "@/components/ProtectedRoute";
+
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
+
 import Link from "next/link";
-import { products } from "@/data/products";
+
+import { supabase } from "@/lib/supabase";
 
 export default function AdminProductsPage() {
 
+  const [products, setProducts] =
+    useState<any[]>([]);
+
+  useEffect(() => {
+
+    async function fetchProducts() {
+
+      const { data, error } =
+        await supabase
+          .from("products")
+          .select("*");
+
+      if (error) {
+
+        console.log(error);
+
+      } else {
+
+        setProducts(data || []);
+      }
+    }
+
+    fetchProducts();
+
+  }, []);
+
   return (
-    <ProtectedRoute>
+    <main className="min-h-screen bg-black text-white p-8">
 
-    <main className="min-h-screen bg-black text-white p-10">
+      <div className="max-w-7xl mx-auto">
 
-      <div className="flex items-center justify-between mb-12">
+        <div className="flex items-center justify-between mb-10">
 
-        <div>
+          <h1 className="text-4xl font-bold">
 
-          <h1 className="text-5xl font-extrabold">
             Product Management
+
           </h1>
 
-          <p className="text-gray-400 mt-4 text-lg">
-            Manage Dealstack inventory products.
-          </p>
+          <Link
+            href="/admin/add-product"
+            className="bg-yellow-400 text-black px-5 py-3 rounded-xl font-semibold hover:bg-yellow-300 transition"
+          >
+
+            Add Product
+
+          </Link>
 
         </div>
 
-        <Link href="/admin/add-product">
+        <div className="grid md:grid-cols-3 gap-8">
 
-  <button className="bg-white text-black px-6 py-4 rounded-xl font-bold hover:bg-gray-200 transition">
+          {products.map((product) => (
 
-    + Add Product
+            <div
+              key={product.id}
+              className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800"
+            >
 
-  </button>
+              <div className="p-6">
 
-</Link>
-
-      </div>
-
-      {/* Products Table */}
-      <div className="overflow-x-auto border border-gray-800 rounded-2xl">
-
-        <table className="w-full">
-
-          <thead className="bg-gray-900">
-
-            <tr className="text-left">
-
-              <th className="p-6">Image</th>
-
-              <th className="p-6">Title</th>
-
-              <th className="p-6">Category</th>
-
-              <th className="p-6">Price</th>
-
-              <th className="p-6">Actions</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            {products.map((product) => (
-
-              <tr
-                key={product.id}
-                className="border-t border-gray-800"
-              >
-
-                <td className="p-6">
+                <div className="bg-black rounded-xl p-4 mb-5">
 
                   <Image
-                    src={product.image}
-                    alt={product.title}
-                    width={80}
-                    height={80}
-                    className="rounded-xl object-cover"
-                  />
+  src={
+    product.image ||
+    "/images/CP-GPC-DA24PL2C-SE-V2-dealstack.jpg"
+  }
+  alt={product.title}
+  width={400}
+  height={300}
+  className="w-full h-56 object-contain"
+/>
 
-                </td>
+                </div>
 
-                <td className="p-6 font-semibold">
-
-                  {product.title}
-
-                </td>
-
-                <td className="p-6 text-gray-400">
+                <p className="text-yellow-400 mb-2">
 
                   {product.category}
 
-                </td>
+                </p>
 
-                <td className="p-6 font-bold">
+                <h2 className="text-2xl font-bold">
+
+                  {product.title}
+
+                </h2>
+
+                <p className="text-2xl font-semibold mt-4">
 
                   ₹{product.price}
 
-                </td>
+                </p>
 
-                <td className="p-6">
+              </div>
 
-                  <div className="flex gap-4">
+            </div>
 
-                    <button className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+          ))}
 
-                      Edit
-
-                    </button>
-
-                    <button className="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-500 transition">
-
-                      Delete
-
-                    </button>
-
-                  </div>
-
-                </td>
-
-              </tr>
-
-            ))}
-
-          </tbody>
-
-        </table>
+        </div>
 
       </div>
 
     </main>
-
-    </ProtectedRoute>
-    
   );
 }
