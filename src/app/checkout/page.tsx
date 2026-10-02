@@ -1,19 +1,62 @@
 "use client";
+
+import { useState } from "react";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCart } from "@/context/CartContext";
 
 export default function CheckoutPage() {
-
   const { cart, clearCart } = useCart();
+  const router = useRouter();
 
-const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const totalPrice = cart.reduce(
     (total, item) =>
       total + Number(item.price) * item.quantity,
     0
   );
+
+  async function handlePlaceOrder() {
+    if (!name || !email || !phone || !address) {
+      toast.error("Please fill all billing details");
+      return;
+    }
+
+    if (cart.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("orders")
+      .insert([
+        {
+          customer_name: name,
+          customer_email: email,
+          customer_phone: phone,
+          address: address,
+          products: cart,
+          total_price: totalPrice,
+        },
+      ]);
+
+    if (error) {
+      console.log(error);
+      toast.error("Order failed");
+      return;
+    }
+
+    clearCart();
+
+    toast.success("Order placed successfully");
+
+    router.push("/success");
+  }
 
   return (
     <main className="min-h-screen bg-black text-white p-8">
@@ -36,24 +79,32 @@ const router = useRouter();
             <input
               type="text"
               placeholder="Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 outline-none focus:border-white"
             />
 
             <input
               type="email"
               placeholder="Email Address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 outline-none focus:border-white"
             />
 
             <input
               type="text"
               placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="w-full bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 outline-none focus:border-white"
             />
 
             <textarea
               placeholder="Shipping Address"
               rows={5}
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               className="w-full bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 outline-none focus:border-white"
             />
 
@@ -118,21 +169,11 @@ const router = useRouter();
 
             {/* Place Order */}
             <button
-  onClick={() => {
-
-    clearCart();
-
-    toast.success("Order placed successfully");
-
-    router.push("/success");
-
-  }}
-  className="w-full mt-10 bg-white text-black py-4 rounded-xl font-bold hover:bg-gray-200 transition"
->
-
-  Place Order
-
-</button>
+              onClick={handlePlaceOrder}
+              className="w-full mt-10 bg-white text-black py-4 rounded-xl font-bold hover:bg-gray-200 transition"
+            >
+              Place Order
+            </button>
 
           </div>
 

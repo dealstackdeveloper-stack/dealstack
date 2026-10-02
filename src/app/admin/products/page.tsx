@@ -36,6 +36,38 @@ export default function AdminProductsPage() {
 
   }, []);
 
+  async function deleteProduct(id: number) {
+
+  const confirmDelete =
+    confirm("Delete this product?");
+
+  if (!confirmDelete) return;
+
+  const { error } =
+    await supabase
+      .from("products")
+      .delete()
+      .eq("id", id);
+
+  if (error) {
+
+    console.log(error);
+
+    alert("Failed to delete product");
+
+  } else {
+
+    setProducts(
+      products.filter(
+        (product) =>
+          product.id !== id
+      )
+    );
+
+    alert("Product deleted");
+  }
+}
+
   return (
     <main className="min-h-screen bg-black text-white p-8">
 
@@ -74,15 +106,15 @@ export default function AdminProductsPage() {
                 <div className="bg-black rounded-xl p-4 mb-5">
 
                   <Image
-  src={
-    product.image ||
-    "/images/CP-GPC-DA24PL2C-SE-V2-dealstack.jpg"
-  }
-  alt={product.title}
-  width={400}
-  height={300}
-  className="w-full h-56 object-contain"
-/>
+                     src={
+                    product.image ||
+                     "/images/CP-GPC-DA24PL2C-SE-V2-dealstack.jpg"
+                    }
+                      alt={product.title}
+                      width={400}
+                      height={300}
+                      className="w-full h-56 object-contain"
+                    />
 
                 </div>
 
@@ -105,6 +137,30 @@ export default function AdminProductsPage() {
                 </p>
 
               </div>
+
+              <div className="mt-6 flex gap-3">
+
+<Link
+  href={`/admin/products/${product.id}`}
+  className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-semibold transition"
+>
+
+  Edit
+
+</Link>
+
+  <button
+    onClick={() =>
+      deleteProduct(product.id)
+    }
+    className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-semibold transition"
+  >
+
+    Delete
+
+  </button>
+
+</div>
 
             </div>
 
