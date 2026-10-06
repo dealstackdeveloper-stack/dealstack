@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "Dealstack",
@@ -35,6 +36,7 @@ export default function RootLayout({
   />
 
   {children}
+  <SpeedInsights />
 
 </CartProvider>
 </AuthProvider>
