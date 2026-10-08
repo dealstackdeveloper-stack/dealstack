@@ -1,141 +1,234 @@
 "use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { supabase } from "@/lib/supabase";
+
+const ORDER_STATUSES = [
+  "Pending",
+  "Processing",
+  "Shipped",
+  "Delivered",
+  "Cancelled",
+];
+
 export default function OrdersPage() {
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-  const orders = [
-    {
-      id: "#DS1001",
-      customer: "Rahul Sharma",
-      total: "₹12,999",
-      status: "Processing",
-    },
+  useEffect(() => {
+    async function fetchOrders() {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    {
-      id: "#DS1002",
-      customer: "Amit Verma",
-      total: "₹8,499",
-      status: "Shipped",
-    },
+      if (error) {
+        console.log("Error fetching orders:", error);
+      } else {
+        setOrders(data || []);
+      }
 
-    {
-      id: "#DS1003",
-      customer: "Priya Patel",
-      total: "₹24,999",
-      status: "Delivered",
-    },
+      setLoading(false);
+    }
 
-    {
-      id: "#DS1004",
-      customer: "Karan Singh",
-      total: "₹5,999",
-      status: "Pending",
-    },
-  ];
+    fetchOrders();
+  }, []);
+
+  async function updateOrderStatus(
+    orderId: number,
+    newStatus: string
+  ) {
+    setUpdatingId(orderId);
+
+    const { error } = await supabase
+      .from("orders")
+      .update({
+        status: newStatus,
+      })
+      .eq("id", orderId);
+
+    if (error) {
+      console.log("Error updating order status:", error);
+      alert("Failed to update order status");
+    } else {
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          order.id === orderId
+            ? { ...order, status: newStatus }
+            : order
+        )
+      );
+    }
+
+    setUpdatingId(null);
+  }
 
   return (
-
     <ProtectedRoute>
+      <main className="min-h-screen bg-black text-white p-10">
 
-    <main className="min-h-screen bg-black text-white p-10">
+        <div className="mb-12">
+          <h1 className="text-5xl font-extrabold">
+            Orders Management
+          </h1>
 
-      <div className="mb-12">
+          <p className="text-gray-400 mt-4 text-lg">
+            Track and manage customer orders.
+          </p>
+        </div>
 
-        <h1 className="text-5xl font-extrabold">
-          Orders Management
-        </h1>
+        {loading ? (
+          <div className="text-gray-400 text-lg">
+            Loading orders...
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="border border-gray-800 rounded-2xl p-8 text-gray-400">
+            No orders found.
+          </div>
+        ) : (
+          <div className="overflow-x-auto border border-gray-800 rounded-2xl">
 
-        <p className="text-gray-400 mt-4 text-lg">
-          Track and manage customer orders.
-        </p>
+            <table className="w-full">
 
-      </div>
+              <thead className="bg-gray-900">
+                <tr className="text-left">
 
-      <div className="overflow-x-auto border border-gray-800 rounded-2xl">
+                  <th className="p-6">
+                    Order ID
+                  </th>
 
-        <table className="w-full">
+                  <th className="p-6">
+                    Customer
+                  </th>
 
-          <thead className="bg-gray-900">
+                  <th className="p-6">
+                    Phone
+                  </th>
 
-            <tr className="text-left">
+                  <th className="p-6">
+                    Total
+                  </th>
 
-              <th className="p-6">
-                Order ID
-              </th>
+                  <th className="p-6">
+                    Status
+                  </th>
 
-              <th className="p-6">
-                Customer
-              </th>
+                  <th className="p-6">
+                    Date
+                  </th>
 
-              <th className="p-6">
-                Total
-              </th>
+                  <th className="p-6">
+                    Actions
+                  </th>
 
-              <th className="p-6">
-                Status
-              </th>
+                </tr>
+              </thead>
 
-              <th className="p-6">
-                Actions
-              </th>
+              <tbody>
 
-            </tr>
+                {orders.map((order) => (
 
-          </thead>
+                  <tr
+                    key={order.id}
+                    className="border-t border-gray-800 hover:bg-gray-950"
+                  >
 
-          <tbody>
+                    {/* ORDER ID */}
+                    <td className="p-6 font-bold">
 
-            {orders.map((order, index) => (
+                      <Link
+                        href={`/admin/orders/${order.id}`}
+                        className="text-blue-500 hover:text-blue-400 hover:underline transition"
+                      >
+                        #DS{String(order.id).padStart(4, "0")}
+                      </Link>
 
-              <tr
-                key={index}
-                className="border-t border-gray-800"
-              >
+                    </td>
 
-                <td className="p-6 font-bold">
-                  {order.id}
-                </td>
+                    {/* CUSTOMER */}
+                    <td className="p-6">
+                      <div className="font-semibold">
+                        {order.customer_name}
+                      </div>
 
-                <td className="p-6">
-                  {order.customer}
-                </td>
+                      <div className="text-gray-400 text-sm">
+                        {order.customer_email}
+                      </div>
+                    </td>
 
-                <td className="p-6 font-semibold">
-                  {order.total}
-                </td>
+                    {/* PHONE */}
+                    <td className="p-6">
+                      {order.customer_phone}
+                    </td>
 
-                <td className="p-6">
+                    {/* TOTAL */}
+                    <td className="p-6 font-semibold">
+                      ₹
+                      {Number(order.total_price).toLocaleString("en-IN")}
+                    </td>
 
-                  <span className="bg-gray-800 px-4 py-2 rounded-lg text-sm">
+                    {/* STATUS */}
+                    <td className="p-6">
 
-                    {order.status}
+                      <select
+                        value={order.status || "Pending"}
+                        disabled={updatingId === order.id}
+                        onChange={(e) =>
+                          updateOrderStatus(
+                            order.id,
+                            e.target.value
+                          )
+                        }
+                        className="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-white outline-none focus:border-white"
+                      >
+                        {ORDER_STATUSES.map((status) => (
+                          <option
+                            key={status}
+                            value={status}
+                          >
+                            {status}
+                          </option>
+                        ))}
+                      </select>
 
-                  </span>
+                    </td>
 
-                </td>
+                    {/* DATE */}
+                    <td className="p-6 text-gray-400">
+                      {order.created_at
+                        ? new Date(
+                            order.created_at
+                          ).toLocaleString("en-IN")
+                        : "-"}
+                    </td>
 
-                <td className="p-6">
+                    {/* ACTIONS */}
+                    <td className="p-6">
 
-                  <button className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                      <Link
+                        href={`/admin/orders/${order.id}`}
+                        className="bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition inline-block"
+                      >
+                        View
+                      </Link>
 
-                    View
+                    </td>
 
-                  </button>
+                  </tr>
 
-                </td>
+                ))}
 
-              </tr>
+              </tbody>
 
-            ))}
+            </table>
 
-          </tbody>
+          </div>
+        )}
 
-        </table>
-
-      </div>
-
-    </main>
-
+      </main>
     </ProtectedRoute>
-    
   );
 }
