@@ -1,17 +1,27 @@
+"use client";
+
 type CategoryCardProps = {
   title: string;
+  onClick: () => void;
 };
 
 export default function CategoryCard({
   title,
+  onClick,
 }: CategoryCardProps) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-10 hover:border-gray-600 transition cursor-pointer hover:scale-105 duration-300">
-
-      <h3 className="text-2xl font-bold text-center">
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full rounded-2xl border border-gray-800 bg-gray-900 p-10 text-white transition duration-300 hover:scale-105 hover:border-gray-600"
+    >
+      <h3 className="text-center text-2xl font-bold">
         {title}
       </h3>
 
-    </div>
+      <p className="mt-3 text-center text-sm text-gray-400">
+        Explore Products →
+      </p>
+    </button>
   );
 }
