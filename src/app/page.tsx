@@ -3,130 +3,129 @@
 export const dynamic = "force-dynamic";
 
 import { supabase } from "@/lib/supabase";
-
 import { useEffect, useState } from "react";
-
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import CategoryCard from "@/components/CategoryCard";
 
-
-
 export default function Home() {
-
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [sortOption, setSortOption] = useState("default");
+  const [products, setProducts] = useState<any[]>([]);
 
-  const [selectedCategory, setSelectedCategory] =
-    useState("All");
-
-  const [sortOption, setSortOption] =
-  useState("default");
-
-  const [products, setProducts] =
-  useState<any[]>([]);
-  
   useEffect(() => {
-
-  async function fetchProducts() {
-
-    const { data, error } =
-      await supabase
+    async function fetchProducts() {
+      const { data, error } = await supabase
         .from("products")
         .select("*");
 
-    if (error) {
-
-      console.log(error);
-
-    } else {
-
-      setProducts(data);
+      if (error) {
+        console.error("Failed to fetch products:", error);
+      } else {
+        setProducts(data ?? []);
+      }
     }
-  }
 
-  fetchProducts();
-
-}, []);
+    fetchProducts();
+  }, []);
 
   const filteredProducts = products
-  .filter((product) => {
+    .filter((product) => {
+      const matchesSearch = product.title
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" ||
+        product.category === selectedCategory;
 
-    const matchesCategory =
-      selectedCategory === "All" ||
-      product.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      if (sortOption === "low-high") {
+        return Number(a.price) - Number(b.price);
+      }
 
-    return matchesSearch && matchesCategory;
-  })
+      if (sortOption === "high-low") {
+        return Number(b.price) - Number(a.price);
+      }
 
-  .sort((a, b) => {
+      if (sortOption === "a-z") {
+        return a.title.localeCompare(b.title);
+      }
 
-    if (sortOption === "low-high") {
-      return Number(a.price) - Number(b.price);
-    }
+      return 0;
+    });
 
-    if (sortOption === "high-low") {
-      return Number(b.price) - Number(a.price);
-    }
+  function selectCategory(category: string) {
+    setSelectedCategory(category);
 
-    if (sortOption === "a-z") {
-      return a.title.localeCompare(b.title);
-    }
-
-    return 0;
-  });
+    document.getElementById("featured-products")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 
   return (
     <main className="min-h-screen bg-black text-white">
-
       <Navbar />
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center px-6 py-32">
-
-        <h1 className="text-5xl md:text-7xl font-extrabold leading-tight max-w-4xl">
+      <section className="flex flex-col items-center justify-center px-6 py-32 text-center">
+        <h1 className="max-w-4xl text-5xl font-extrabold leading-tight md:text-7xl">
           Modern Tech Marketplace for Smart Shopping
         </h1>
 
-        <p className="mt-6 text-gray-400 text-lg max-w-2xl">
+        <p className="mt-6 max-w-2xl text-lg text-gray-400">
           Explore premium electronics, networking devices,
           CCTV systems, accessories, and future-ready
           technology products.
         </p>
 
-        <div className="flex gap-4 mt-10">
-
-          <button className="bg-white text-black px-8 py-4 rounded-xl font-bold hover:bg-gray-200 transition">
+        <div className="mt-10 flex gap-4">
+          <button
+            type="button"
+            onClick={() => {
+              setSelectedCategory("All");
+              document.getElementById("featured-products")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }}
+            className="rounded-xl bg-white px-8 py-4 font-bold text-black transition hover:bg-gray-200"
+          >
             Shop Now
           </button>
 
-          <button className="border border-gray-700 px-8 py-4 rounded-xl hover:border-white transition">
+          <button
+            type="button"
+            onClick={() => {
+              document.getElementById("shop-categories")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }}
+            className="rounded-xl border border-gray-700 px-8 py-4 transition hover:border-white"
+          >
             Learn More
           </button>
-
         </div>
-
       </section>
 
       {/* Search */}
       <section className="px-8 py-10">
-
         <input
           type="text"
           placeholder="Search products..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full bg-gray-900 border border-gray-800 rounded-2xl px-6 py-4 text-white outline-none focus:border-white transition"
+          className="w-full rounded-2xl border border-gray-800 bg-gray-900 px-6 py-4 text-white outline-none transition focus:border-white"
         />
-
       </section>
 
-      {/* Categories Filter */}
-      <section className="px-8 pb-10 flex flex-wrap gap-4">
-
+      {/* Category Filters */}
+      <section className="flex flex-wrap gap-4 px-8 pb-10">
         {[
           "All",
           "Surveillance Systems",
@@ -134,101 +133,115 @@ export default function Home() {
           "Surveillance Hard Disk",
           "Gadget & Accessories",
         ].map((category) => (
-
           <button
             key={category}
+            type="button"
             onClick={() => setSelectedCategory(category)}
-            className={`px-6 py-3 rounded-xl border transition ${
+            className={`rounded-xl border px-6 py-3 transition ${
               selectedCategory === category
-                ? "bg-white text-black border-white"
-                : "bg-gray-900 text-white border-gray-800"
+                ? "border-white bg-white text-black"
+                : "border-gray-800 bg-gray-900 text-white hover:border-gray-600"
             }`}
           >
             {category}
           </button>
-
         ))}
-
       </section>
 
-{/* Sorting */}
-<section className="px-8 pb-10">
-
-  <select
-    value={sortOption}
-    onChange={(e) => setSortOption(e.target.value)}
-    className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-3 text-white outline-none"
-  >
-
-    <option value="default">
-      Default Sorting
-    </option>
-
-    <option value="low-high">
-      Price: Low to High
-    </option>
-
-    <option value="high-low">
-      Price: High to Low
-    </option>
-
-    <option value="a-z">
-      Alphabetical: A-Z
-    </option>
-
-  </select>
-
-</section>
+      {/* Sorting */}
+      <section className="px-8 pb-10">
+        <select
+          aria-label="Sort products"
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+          className="rounded-xl border border-gray-800 bg-gray-900 px-5 py-3 text-white outline-none"
+        >
+          <option value="default">Default Sorting</option>
+          <option value="low-high">Price: Low to High</option>
+          <option value="high-low">Price: High to Low</option>
+          <option value="a-z">Alphabetical: A-Z</option>
+        </select>
+      </section>
 
       {/* Featured Products */}
-      <section className="px-8 pb-20">
-
-        <h2 className="text-4xl font-bold mb-10">
+      <section id="featured-products" className="scroll-mt-6 px-8 pb-20">
+        <h2 className="mb-4 text-4xl font-bold">
           Featured Products
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <p className="mb-10 text-gray-400">
+          {selectedCategory === "All"
+            ? `Showing ${filteredProducts.length} products`
+            : `${selectedCategory} · ${filteredProducts.length} products`}
+        </p>
 
-          {filteredProducts.map((product) => (
-
-            <ProductCard
-              key={product.id}
-              title={product.title}
-              price={product.price}
-              image={product.image}
-              slug={product.slug}
-            />
-
-          ))}
-
-        </div>
-
+        {filteredProducts.length > 0 ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                title={product.title}
+                price={product.price}
+                image={product.image}
+                slug={product.slug}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-gray-800 bg-gray-900 p-10 text-center">
+            <p className="text-lg text-gray-300">
+              No products found in this selection.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory("All");
+                setSearch("");
+              }}
+              className="mt-5 rounded-xl bg-white px-6 py-3 font-semibold text-black hover:bg-gray-200"
+            >
+              Show All Products
+            </button>
+          </div>
+        )}
       </section>
 
-      {/* Categories */}
-      <section className="px-8 pb-24">
-
-        <h2 className="text-4xl font-bold mb-10">
+      {/* Shop by Category */}
+      <section
+        id="shop-categories"
+        className="scroll-mt-6 px-8 pb-24"
+      >
+        <h2 className="mb-10 text-4xl font-bold">
           Shop by Category
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <CategoryCard
+            title="Surveillance Systems"
+            onClick={() => selectCategory("Surveillance Systems")}
+          />
 
-          <CategoryCard title="Surveillance Systems" />
+          <CategoryCard
+            title="Networking Switches & Routers"
+            onClick={() =>
+              selectCategory("Networking Switches & Routers")
+            }
+          />
 
-          <CategoryCard title="Networking Switches & Routers" />
+          <CategoryCard
+            title="Surveillance Hard Disk"
+            onClick={() => selectCategory("Surveillance Hard Disk")}
+          />
 
-          <CategoryCard title="Surveillance Hard Disk" />
-
-          <CategoryCard title="Gadget & Accessories" />
-
+          <CategoryCard
+            title="Gadget & Accessories"
+            onClick={() => selectCategory("Gadget & Accessories")}
+          />
         </div>
-
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 py-10 px-8 text-center text-gray-500">
-
+      <footer className="border-t border-gray-800 px-8 py-10 text-center text-gray-500">
         <h3 className="text-2xl font-bold text-white">
           Dealstack
         </h3>
@@ -241,9 +254,7 @@ export default function Home() {
         <p className="mt-6 text-sm">
           © 2026 Dealstack. All rights reserved.
         </p>
-
       </footer>
-
     </main>
   );
 }
