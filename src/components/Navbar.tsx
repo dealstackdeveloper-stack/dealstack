@@ -106,13 +106,10 @@ export default function Navbar() {
           <Link href="/" className={navLinkClass}>Home</Link>
         </li>
         <li>
-          <button
-            type="button"
-            onClick={() => goToSection("featured-products")}
-            className={navLinkClass}
-          >
-            Products
-          </button>
+          <Link href="/products">
+           Products
+          </Link>
+            
         </li>
         <li>
           <button
