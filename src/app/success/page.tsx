@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { jsPDF } from "jspdf";
@@ -40,7 +40,7 @@ function formatINR(value: number) {
   })}`;
 }
 
-export default function SuccessPage() {
+function SuccessPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
@@ -387,5 +387,19 @@ export default function SuccessPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-black px-6 text-white">
+          <p>Loading order confirmation...</p>
+        </main>
+      }
+    >
+      <SuccessPageContent />
+    </Suspense>
   );
 }
