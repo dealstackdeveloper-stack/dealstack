@@ -321,10 +321,10 @@ export default function ProductPage() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-white px-4 text-slate-900">
         <div className="text-center">
-          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-gray-700 border-t-yellow-400" />
-          <p className="text-gray-300">Loading product...</p>
+          <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-yellow-400" />
+          <p className="text-slate-600">Loading product...</p>
         </div>
       </main>
     );
@@ -332,11 +332,11 @@ export default function ProductPage() {
 
   if (notFound || !product) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
+      <main className="flex min-h-screen items-center justify-center bg-white px-4 text-slate-900">
         <div className="max-w-md text-center">
           <p className="text-6xl font-extrabold text-yellow-400">404</p>
           <h1 className="mt-4 text-2xl font-bold">Product not found</h1>
-          <p className="mt-3 text-gray-400">
+          <p className="mt-3 text-slate-500">
             This product may have been removed or is currently unavailable.
           </p>
           <Link
@@ -522,11 +522,15 @@ export default function ProductPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-4 py-8 text-white sm:px-6 sm:py-10">
+    <main className="min-h-screen bg-white px-4 py-8 text-slate-900 sm:px-6 sm:py-10">
       <div className="mx-auto max-w-7xl">
+        <div className="mb-6 rounded-2xl bg-slate-950 px-5 py-4 text-white sm:px-7">
+          <p className="text-xs font-bold uppercase tracking-[.22em] text-yellow-300">Dealstack • Technology Store</p>
+          <p className="mt-1 text-lg font-bold sm:text-xl">Product details</p>
+        </div>
         <Link
           href="/products"
-          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-300 transition hover:text-yellow-400"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-yellow-700"
         >
           <span className="text-xl" aria-hidden="true">←</span>
           Back to Catalogue
@@ -537,7 +541,7 @@ export default function ProductPage() {
           <div className="min-w-0">
             <div
               ref={imageFrameRef}
-              className="group relative flex min-h-[320px] items-center justify-center overflow-visible rounded-3xl border border-gray-800 bg-[#101827] p-5 sm:min-h-[480px] sm:p-10"
+              className="group relative flex min-h-[320px] items-center justify-center overflow-visible rounded-3xl border border-slate-200 bg-slate-50 p-5 sm:min-h-[480px] sm:p-10"
               onMouseEnter={() => setIsZooming(true)}
               onMouseLeave={() => setIsZooming(false)}
               onMouseMove={handleImageMouseMove}
@@ -551,13 +555,13 @@ export default function ProductPage() {
                     className="max-h-[440px] w-full cursor-crosshair object-contain"
                     fetchPriority="high"
                   />
-                  <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/75 px-3 py-1 text-xs text-gray-200 opacity-100 transition group-hover:opacity-0">
+                  <span className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/75 px-3 py-1 text-xs text-slate-700 opacity-100 transition group-hover:opacity-0">
                     Move cursor over image to zoom
                   </span>
                   {isZooming && (
                     <div
                       aria-hidden="true"
-                      className="pointer-events-none absolute left-[calc(100%+12px)] top-0 z-30 hidden h-full min-h-[480px] w-full overflow-hidden rounded-2xl border border-gray-700 bg-[#101827] shadow-2xl lg:block"
+                      className="pointer-events-none absolute left-[calc(100%+12px)] top-0 z-30 hidden h-full min-h-[480px] w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl lg:block"
                       style={{
                         backgroundImage: `url("${selectedImage.replace(/"/g, '\\"')}")`,
                         backgroundRepeat: "no-repeat",
@@ -568,7 +572,7 @@ export default function ProductPage() {
                   )}
                 </>
               ) : (
-                <div className="text-center text-gray-500">
+                <div className="text-center text-slate-500">
                   <span className="text-5xl">▧</span>
                   <p className="mt-3">No product image available</p>
                 </div>
@@ -584,10 +588,10 @@ export default function ProductPage() {
                     onClick={() => setSelectedImage(image)}
                     aria-label={`View product image ${index + 1}`}
                     aria-pressed={selectedImage === image}
-                    className={`flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border-2 bg-[#101827] p-2 transition ${
+                    className={`flex h-20 w-20 items-center justify-center overflow-hidden rounded-xl border-2 bg-slate-50 p-2 transition ${
                       selectedImage === image
                         ? "border-yellow-400"
-                        : "border-gray-800 hover:border-gray-500"
+                        : "border-slate-200 hover:border-slate-400"
                     }`}
                   >
                     <img
@@ -615,7 +619,7 @@ export default function ProductPage() {
             )}
 
             {currentProduct.brand && (
-              <p className="mt-4 text-sm font-semibold uppercase tracking-widest text-gray-400">
+              <p className="mt-4 text-sm font-semibold uppercase tracking-widest text-slate-500">
                 {currentProduct.brand}
               </p>
             )}
@@ -625,33 +629,33 @@ export default function ProductPage() {
             </h1>
 
             {(currentProduct.model_number || currentProduct.sku) && (
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-gray-400">
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-500">
                 {currentProduct.model_number && (
                   <p>
                     Model:{" "}
-                    <span className="text-gray-200">
+                    <span className="text-slate-700">
                       {currentProduct.model_number}
                     </span>
                   </p>
                 )}
                 {currentProduct.sku && (
                   <p>
-                    SKU: <span className="text-gray-200">{currentProduct.sku}</span>
+                    SKU: <span className="text-slate-700">{currentProduct.sku}</span>
                   </p>
                 )}
               </div>
             )}
 
             {currentProduct.short_description && (
-              <p className="mt-5 leading-7 text-gray-300">
+              <p className="mt-5 leading-7 text-slate-600">
                 {currentProduct.short_description}
               </p>
             )}
 
             {colorVariants.length > 0 && (
               <section className="mt-5" aria-label="Choose product color">
-                <p className="mb-3 text-sm font-semibold text-gray-200">
-                  Color: <span className="font-normal text-gray-400">{selectedColor || String(colorVariants[0].value)}</span>
+                <p className="mb-3 text-sm font-semibold text-slate-700">
+                  Color: <span className="font-normal text-slate-500">{selectedColor || String(colorVariants[0].value)}</span>
                 </p>
                 <div className="flex flex-wrap gap-3">
                   {colorVariants.map((variant, index) => {
@@ -670,7 +674,7 @@ export default function ProductPage() {
                         }}
                         aria-label={`Select ${value} color`}
                         aria-pressed={isSelected}
-                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${isSelected ? "border-yellow-400 bg-yellow-400/10 text-white" : "border-gray-700 text-gray-300 hover:border-gray-500"}`}
+                        className={`flex items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${isSelected ? "border-yellow-400 bg-yellow-400/10 text-slate-900" : "border-slate-200 text-slate-600 hover:border-slate-400"}`}
                       >
                         <span aria-hidden="true" className="h-5 w-5 rounded-full border border-white/30 shadow-inner" style={{ backgroundColor: swatch }} />
                         {value}
@@ -681,25 +685,25 @@ export default function ProductPage() {
               </section>
             )}
 
-            <div className="mt-7 rounded-2xl border border-gray-800 bg-[#101827] p-5 sm:p-6">
+            <div className="mt-7 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-3xl font-extrabold text-white sm:text-4xl">
+                <span className="text-3xl font-extrabold text-slate-900 sm:text-4xl">
                   {formatPrice(price)}
                 </span>
 
                 {discount > 0 && (
                   <>
-                    <span className="text-lg text-gray-500 line-through">
+                    <span className="text-lg text-slate-500 line-through">
                       {formatPrice(mrp)}
                     </span>
-                    <span className="rounded-md bg-green-500/15 px-2 py-1 text-sm font-bold text-green-400">
+                    <span className="rounded-md bg-green-50 px-2 py-1 text-sm font-bold text-green-700">
                       {discount}% OFF
                     </span>
                   </>
                 )}
               </div>
 
-              <p className="mt-2 text-xs text-gray-400">
+              <p className="mt-2 text-xs text-slate-500">
                 {Number(currentProduct.gst_rate) > 0
                   ? `GST rate: ${currentProduct.gst_rate}%`
                   : "Taxes and final charges are subject to checkout details."}
@@ -722,11 +726,11 @@ export default function ProductPage() {
 
               {inStock && (
                 <div className="mt-6 flex flex-wrap items-center gap-4">
-                  <span className="text-sm font-semibold text-gray-300">
+                  <span className="text-sm font-semibold text-slate-600">
                     Quantity
                   </span>
 
-                  <div className="flex items-center overflow-hidden rounded-lg border border-gray-700">
+                  <div className="flex items-center overflow-hidden rounded-lg border border-slate-200">
                     <button
                       type="button"
                       aria-label="Decrease quantity"
@@ -734,7 +738,7 @@ export default function ProductPage() {
                       onClick={() =>
                         setQuantity((q) => Math.max(1, q - 1))
                       }
-                      className="h-11 w-11 text-xl transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="h-11 w-11 text-xl transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       −
                     </button>
@@ -754,7 +758,7 @@ export default function ProductPage() {
                             : q + 1
                         )
                       }
-                      className="h-11 w-11 text-xl transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="h-11 w-11 text-xl transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       +
                     </button>
@@ -767,7 +771,7 @@ export default function ProductPage() {
                   type="button"
                   disabled={!inStock}
                   onClick={() => handleAddToCart(false)}
-                  className="rounded-xl bg-yellow-400 px-5 py-3.5 font-bold text-black transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-400"
+                  className="rounded-xl bg-yellow-400 px-5 py-3.5 font-bold text-black transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-slate-500"
                 >
                   Add to Cart
                 </button>
@@ -776,7 +780,7 @@ export default function ProductPage() {
                   type="button"
                   disabled={!inStock}
                   onClick={() => handleAddToCart(true)}
-                  className="rounded-xl border border-yellow-400 px-5 py-3.5 font-bold text-yellow-400 transition hover:bg-yellow-400 hover:text-black disabled:cursor-not-allowed disabled:border-gray-700 disabled:text-gray-500"
+                  className="rounded-xl border border-yellow-500 px-5 py-3.5 font-bold text-yellow-700 transition hover:bg-yellow-400 hover:text-slate-950 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-500"
                 >
                   Buy Now
                 </button>
@@ -785,7 +789,7 @@ export default function ProductPage() {
               <button
                 type="button"
                 onClick={handleShare}
-                className="mt-4 w-full rounded-xl border border-gray-700 px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-gray-500 hover:bg-gray-800"
+                className="mt-4 w-full rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-100"
               >
                 ↗ Share Product
               </button>
@@ -793,8 +797,8 @@ export default function ProductPage() {
 
             <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
               {currentProduct.warranty && (
-                <div className="rounded-xl border border-gray-800 bg-[#101827] p-4">
-                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
                     Warranty
                   </p>
                   <p className="mt-1 font-semibold">
@@ -804,11 +808,11 @@ export default function ProductPage() {
               )}
 
               {currentProduct.delivery_information && (
-                <div className="rounded-xl border border-gray-800 bg-[#101827] p-4">
-                  <p className="text-xs uppercase tracking-wide text-gray-400">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                  <p className="text-xs uppercase tracking-wide text-slate-500">
                     Delivery
                   </p>
-                  <p className="mt-1 text-sm leading-6 text-gray-200">
+                  <p className="mt-1 text-sm leading-6 text-slate-700">
                     {currentProduct.delivery_information}
                   </p>
                 </div>
@@ -822,7 +826,7 @@ export default function ProductPage() {
                   {features.map((feature, index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-3 text-sm leading-6 text-gray-300"
+                      className="flex items-start gap-3 text-sm leading-6 text-slate-600"
                     >
                       <span className="mt-0.5 text-yellow-400">✓</span>
                       <span>{getText(feature)}</span>
@@ -835,8 +839,8 @@ export default function ProductPage() {
         </section>
 
         {/* Product detail tabs */}
-        <section className="mt-14 overflow-hidden rounded-2xl border border-gray-800 bg-[#101827] sm:mt-20">
-          <div className="flex flex-wrap border-b border-gray-800">
+        <section className="mt-14 overflow-hidden rounded-2xl border border-slate-200 bg-white sm:mt-20">
+          <div className="flex flex-wrap border-b border-slate-200">
             {(
               [
                 ["description", "Description"],
@@ -851,7 +855,7 @@ export default function ProductPage() {
                 className={`border-b-2 px-4 py-4 text-sm font-semibold transition sm:px-7 ${
                   activeTab === tab
                     ? "border-yellow-400 text-yellow-400"
-                    : "border-transparent text-gray-400 hover:text-white"
+                    : "border-transparent text-slate-500 hover:text-slate-900"
                 }`}
               >
                 {label}
@@ -863,7 +867,7 @@ export default function ProductPage() {
             {activeTab === "description" && (
               <div>
                 <h2 className="text-xl font-bold">Product Description</h2>
-                <p className="mt-4 whitespace-pre-line leading-8 text-gray-300">
+                <p className="mt-4 whitespace-pre-line leading-8 text-slate-600">
                   {currentProduct.description ||
                     currentProduct.short_description ||
                     "Detailed product description will be available soon."}
@@ -872,7 +876,7 @@ export default function ProductPage() {
                 {packageContents.length > 0 && (
                   <div className="mt-8">
                     <h3 className="font-bold">Package Contents</h3>
-                    <ul className="mt-3 space-y-2 text-gray-300">
+                    <ul className="mt-3 space-y-2 text-slate-600">
                       {packageContents.map((item, index) => (
                         <li key={index} className="flex gap-2">
                           <span className="text-yellow-400">•</span>
@@ -908,11 +912,11 @@ export default function ProductPage() {
                     <table className="w-full border-collapse text-left text-sm">
                       <tbody>
                         {Object.entries(specifications).map(([key, value]) => (
-                          <tr key={key} className="border-b border-gray-800">
-                            <th className="w-2/5 px-3 py-4 font-semibold capitalize text-gray-300 sm:px-5">
+                          <tr key={key} className="border-b border-slate-200">
+                            <th className="w-2/5 px-3 py-4 font-semibold capitalize text-slate-600 sm:px-5">
                               {key.replace(/[_-]/g, " ")}
                             </th>
-                            <td className="px-3 py-4 text-gray-400 sm:px-5">
+                            <td className="px-3 py-4 text-slate-500 sm:px-5">
                               {typeof value === "object" && value !== null
                                 ? JSON.stringify(value)
                                 : String(value ?? "—")}
@@ -923,7 +927,7 @@ export default function ProductPage() {
                     </table>
                   </div>
                 ) : (
-                  <p className="mt-4 text-gray-400">
+                  <p className="mt-4 text-slate-500">
                     Technical specifications have not been added yet.
                   </p>
                 )}
@@ -933,7 +937,7 @@ export default function ProductPage() {
                     <h3 className="font-bold">Available Variants</h3>
                     <div className="mt-3 flex flex-wrap gap-3">
                       {variants.filter((variant) => !variant || typeof variant !== "object" || String((variant as Record<string, unknown>).name ?? "").toLowerCase() !== "color").map((variant, index) => (
-                        <div key={index} className="rounded-lg border border-gray-700 px-4 py-3 text-sm text-gray-300">
+                        <div key={index} className="rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-600">
                           {getText(variant) || `Variant ${index + 1}`}
                         </div>
                       ))}
@@ -947,7 +951,7 @@ export default function ProductPage() {
               <div className="space-y-6">
                 <div>
                   <h2 className="font-bold">Delivery Information</h2>
-                  <p className="mt-2 whitespace-pre-line leading-7 text-gray-300">
+                  <p className="mt-2 whitespace-pre-line leading-7 text-slate-600">
                     {currentProduct.delivery_information ||
                       "Delivery details will be confirmed during order processing."}
                   </p>
@@ -955,7 +959,7 @@ export default function ProductPage() {
 
                 <div>
                   <h2 className="font-bold">Return Policy</h2>
-                  <p className="mt-2 whitespace-pre-line leading-7 text-gray-300">
+                  <p className="mt-2 whitespace-pre-line leading-7 text-slate-600">
                     {currentProduct.return_policy ||
                       "Please contact Dealstack support for return eligibility and applicable terms."}
                   </p>
@@ -964,7 +968,7 @@ export default function ProductPage() {
                 {currentProduct.warranty && (
                   <div>
                     <h2 className="font-bold">Warranty Information</h2>
-                    <p className="mt-2 text-gray-300">
+                    <p className="mt-2 text-slate-600">
                       {currentProduct.warranty}
                     </p>
                   </div>
@@ -976,7 +980,7 @@ export default function ProductPage() {
 
         {/* Customer reviews and ratings */}
         <section className="mt-14 sm:mt-20" aria-labelledby="reviews-heading">
-          <div className="rounded-2xl border border-gray-800 bg-[#101827] p-5 sm:p-8">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-widest text-yellow-400">
@@ -986,9 +990,9 @@ export default function ProductPage() {
                   Customer Reviews &amp; Ratings
                 </h2>
               </div>
-              <div className="rounded-xl border border-gray-700 px-4 py-3">
+              <div className="rounded-xl border border-slate-200 px-4 py-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-extrabold text-white">
+                  <span className="text-2xl font-extrabold text-slate-900">
                     {reviews.length
                       ? (reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length).toFixed(1)
                       : "—"}
@@ -997,19 +1001,19 @@ export default function ProductPage() {
                     {reviews.length ? "★".repeat(Math.round(reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length)) : "☆☆☆☆☆"}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-slate-500">
                   {reviews.length} approved review{reviews.length === 1 ? "" : "s"}
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 border-t border-gray-800 pt-7">
+            <div className="mt-8 border-t border-slate-200 pt-7">
               {reviewsLoading ? (
-                <p className="text-sm text-gray-400">Loading reviews...</p>
+                <p className="text-sm text-slate-500">Loading reviews...</p>
               ) : myReview ? (
-                <div className="rounded-xl border border-gray-700 bg-black/30 p-4">
+                <div className="rounded-xl border border-slate-200 bg-slate-100 p-4">
                   <h3 className="font-bold">Your review</h3>
-                  <p className="mt-2 text-sm text-gray-300">
+                  <p className="mt-2 text-sm text-slate-600">
                     {myReview.status === "approved"
                       ? "Your review is published. Thank you for your feedback!"
                       : myReview.status === "pending"
@@ -1020,15 +1024,15 @@ export default function ProductPage() {
                     <span className="tracking-wide text-yellow-400">{"★".repeat(myReview.rating)}{"☆".repeat(5 - myReview.rating)}</span>
                     <span className="font-semibold">{myReview.review_title}</span>
                   </div>
-                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-gray-300">{myReview.review_text}</p>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-600">{myReview.review_text}</p>
                 </div>
               ) : currentUserId ? (
-                <form onSubmit={handleSubmitReview} className="rounded-xl border border-gray-700 p-4 sm:p-6">
+                <form onSubmit={handleSubmitReview} className="rounded-xl border border-slate-200 p-4 sm:p-6">
                   <h3 className="text-lg font-bold">Write a review</h3>
-                  <p className="mt-1 text-sm text-gray-400">Share your experience with this product. Reviews are published after approval.</p>
+                  <p className="mt-1 text-sm text-slate-500">Share your experience with this product. Reviews are published after approval.</p>
 
                   <fieldset className="mt-5">
-                    <legend className="mb-2 text-sm font-semibold text-gray-200">Your rating</legend>
+                    <legend className="mb-2 text-sm font-semibold text-slate-700">Your rating</legend>
                     <div className="flex items-center gap-1" role="radiogroup" aria-label="Product rating">
                       {[1, 2, 3, 4, 5].map((rating) => (
                         <button
@@ -1043,11 +1047,11 @@ export default function ProductPage() {
                           ★
                         </button>
                       ))}
-                      <span className="ml-2 text-sm text-gray-400">{reviewRating}/5</span>
+                      <span className="ml-2 text-sm text-slate-500">{reviewRating}/5</span>
                     </div>
                   </fieldset>
 
-                  <label htmlFor="review-title" className="mt-5 block text-sm font-semibold text-gray-200">Review title</label>
+                  <label htmlFor="review-title" className="mt-5 block text-sm font-semibold text-slate-700">Review title</label>
                   <input
                     id="review-title"
                     name="review_title"
@@ -1058,10 +1062,10 @@ export default function ProductPage() {
                     value={reviewTitle}
                     onChange={(event) => setReviewTitle(event.target.value)}
                     placeholder="Summarize your experience"
-                    className="mt-2 w-full rounded-xl border border-gray-700 bg-black px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-yellow-400"
+                    className="mt-2 w-full rounded-xl border border-slate-200 bg-black px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-yellow-400"
                   />
 
-                  <label htmlFor="review-text" className="mt-5 block text-sm font-semibold text-gray-200">Your review</label>
+                  <label htmlFor="review-text" className="mt-5 block text-sm font-semibold text-slate-700">Your review</label>
                   <textarea
                     id="review-text"
                     name="review_text"
@@ -1072,9 +1076,9 @@ export default function ProductPage() {
                     value={reviewText}
                     onChange={(event) => setReviewText(event.target.value)}
                     placeholder="What did you like or dislike about this product?"
-                    className="mt-2 w-full resize-y rounded-xl border border-gray-700 bg-black px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-yellow-400"
+                    className="mt-2 w-full resize-y rounded-xl border border-slate-200 bg-black px-4 py-3 text-slate-900 outline-none transition placeholder:text-slate-500 focus:border-yellow-400"
                   />
-                  <p className="mt-2 text-xs text-gray-500">{reviewText.length}/3000 characters</p>
+                  <p className="mt-2 text-xs text-slate-500">{reviewText.length}/3000 characters</p>
 
                   <button
                     type="submit"
@@ -1085,9 +1089,9 @@ export default function ProductPage() {
                   </button>
                 </form>
               ) : (
-                <div className="rounded-xl border border-gray-700 p-5">
+                <div className="rounded-xl border border-slate-200 p-5">
                   <h3 className="font-bold">Have you used this product?</h3>
-                  <p className="mt-2 text-sm text-gray-400">Log in to share your rating and review.</p>
+                  <p className="mt-2 text-sm text-slate-500">Log in to share your rating and review.</p>
                   <Link href="/customer-login" className="mt-4 inline-flex rounded-xl bg-yellow-400 px-5 py-3 font-bold text-black transition hover:bg-yellow-300">
                     Log in to write a review
                   </Link>
@@ -1098,22 +1102,22 @@ export default function ProductPage() {
             <div className="mt-8 space-y-4">
               <h3 className="text-lg font-bold">What customers say</h3>
               {!reviewsLoading && reviews.length === 0 ? (
-                <p className="rounded-xl border border-gray-800 p-5 text-sm text-gray-400">No approved reviews yet. Be the first to review this product.</p>
+                <p className="rounded-xl border border-slate-200 p-5 text-sm text-slate-500">No approved reviews yet. Be the first to review this product.</p>
               ) : (
                 reviews.map((review) => (
-                  <article key={review.id} className="rounded-xl border border-gray-800 p-4 sm:p-5">
+                  <article key={review.id} className="rounded-xl border border-slate-200 p-4 sm:p-5">
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <div className="text-lg tracking-wide text-yellow-400" aria-label={`${review.rating} out of 5 stars`}>
                           {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
                         </div>
-                        <h4 className="mt-1 font-bold text-white">{review.review_title}</h4>
+                        <h4 className="mt-1 font-bold text-slate-900">{review.review_title}</h4>
                       </div>
-                      <time dateTime={review.created_at} className="text-xs text-gray-500">
+                      <time dateTime={review.created_at} className="text-xs text-slate-500">
                         {new Date(review.created_at).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       </time>
                     </div>
-                    <p className="mt-3 whitespace-pre-line text-sm leading-7 text-gray-300">{review.review_text}</p>
+                    <p className="mt-3 whitespace-pre-line text-sm leading-7 text-slate-600">{review.review_text}</p>
                   </article>
                 ))
               )}
@@ -1159,7 +1163,7 @@ export default function ProductPage() {
                   <Link
                     key={item.id}
                     href={`/products/${item.slug}`}
-                    className="group overflow-hidden rounded-2xl border border-gray-800 bg-[#101827] transition hover:border-yellow-400/60"
+                    className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 transition hover:border-yellow-400/60"
                   >
                     <div className="relative flex h-36 items-center justify-center bg-gray-900 p-4 sm:h-48">
                       {relatedImage ? (
@@ -1170,7 +1174,7 @@ export default function ProductPage() {
                           loading="lazy"
                         />
                       ) : (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-slate-500">
                           No image
                         </span>
                       )}
@@ -1183,7 +1187,7 @@ export default function ProductPage() {
                     </div>
 
                     <div className="p-3 sm:p-4">
-                      <h3 className="line-clamp-2 min-h-10 text-sm font-semibold text-white group-hover:text-yellow-400 sm:text-base">
+                      <h3 className="line-clamp-2 min-h-10 text-sm font-semibold text-slate-900 group-hover:text-yellow-400 sm:text-base">
                         {item.title}
                       </h3>
                       <p className="mt-3 font-bold text-yellow-400">

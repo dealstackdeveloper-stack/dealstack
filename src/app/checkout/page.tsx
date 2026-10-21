@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useCart } from "@/context/CartContext";
 import toast from "react-hot-toast";
@@ -31,7 +32,7 @@ const emptyAddress = {
 };
 
 const fieldClass =
-  "w-full min-w-0 rounded-xl border border-gray-800 bg-gray-900 px-5 py-4 outline-none focus:border-white";
+  "w-full min-w-0 rounded-xl border border-white/10 bg-[#080a0f] px-4 py-3.5 text-white outline-none transition placeholder:text-gray-500 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/10";
 
 export default function CheckoutPage() {
   const { cart, clearCart } = useCart();
@@ -149,7 +150,7 @@ export default function CheckoutPage() {
       if (active) setCheckingAuth(false);
     }
 
-    loadCustomer();
+    void loadCustomer();
 
     return () => {
       active = false;
@@ -259,7 +260,6 @@ export default function CheckoutPage() {
         return;
       }
 
-      // Keep the order ID in the URL so the success page can load it.
       clearCart();
       toast.success("Order placed successfully!");
       router.push(`/success?orderId=${newOrder.id}`);
@@ -273,265 +273,496 @@ export default function CheckoutPage() {
 
   if (checkingAuth) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-black text-white">
-        <p>Verifying your account...</p>
+      <main className="flex min-h-screen items-center justify-center bg-[#080a0f] text-white">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-yellow-400" />
+          <p className="mt-4 text-sm text-gray-400">
+            Verifying your account...
+          </p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black p-5 text-white md:p-8">
-      <h1 className="mb-12 text-4xl font-bold md:text-5xl">
-        Checkout
-      </h1>
+    <main className="min-h-screen bg-[#080a0f] px-4 py-8 text-white sm:px-6 lg:px-8 lg:py-12">
+      <div className="mx-auto max-w-7xl">
+        <Link
+          href="/cart"
+          className="inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-yellow-400"
+        >
+          <span aria-hidden="true">←</span>
+          Back to Cart
+        </Link>
 
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-        <section>
-          <h2 className="mb-8 text-3xl font-bold">Billing Details</h2>
+        <header className="mb-8 mt-5 border-b border-white/10 pb-6">
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-yellow-400">
+            Dealstack Store
+          </p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight sm:text-4xl md:text-5xl">
+            Checkout
+          </h1>
+          <p className="mt-3 text-sm text-gray-400 sm:text-base">
+            Confirm your delivery details and review your order.
+          </p>
+        </header>
 
-          <div className="space-y-5">
-            {savedAddresses.length > 0 && (
-              <div>
-                <label className="mb-2 block text-sm text-gray-300">
-                  Choose a Saved Address
-                </label>
-
-                <select
-                  value={selectedAddressId}
-                  onChange={(e) => {
-                    const id = e.target.value;
-
-                    if (!id) {
-                      setSelectedAddressId("");
-                      setAddressFields(emptyAddress);
-                      setSaveAddress(false);
-                      setMakeDefault(false);
-                      return;
-                    }
-
-                    const saved = savedAddresses.find(
-                      (item) => item.id === id
-                    );
-
-                    if (saved) selectSavedAddress(saved);
-                  }}
-                  className={fieldClass}
-                >
-                  <option value="">Enter a new address</option>
-                  {savedAddresses.map((saved) => (
-                    <option key={saved.id} value={saved.id}>
-                      {saved.full_name} — {saved.city}
-                      {saved.is_default ? " (Default)" : ""}
-                    </option>
-                  ))}
-                </select>
-
-                <p className="mt-2 text-sm text-gray-400">
-                  Select an address to fill in your details.
-                </p>
-              </div>
-            )}
-
-            <input
-              type="text"
-              placeholder="Full Name"
-              autoComplete="name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setSelectedAddressId("");
-              }}
-              required
-              className={fieldClass}
-            />
-
-            <input
-              type="email"
-              placeholder="Email Address"
-              value={email}
-              readOnly
-              className={`${fieldClass} cursor-not-allowed bg-gray-800 text-gray-400`}
-            />
-
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              autoComplete="tel"
-              value={phone}
-              onChange={(e) => {
-                setPhone(e.target.value);
-                setSelectedAddressId("");
-              }}
-              required
-              className={fieldClass}
-            />
-
-            <h3 className="pt-2 text-xl font-semibold">
-              Shipping Address
-            </h3>
-
-            <input
-              type="text"
-              placeholder="Address Line 1 / House No. / Street"
-              autoComplete="address-line1"
-              value={addressFields.address_line1}
-              onChange={(e) =>
-                updateAddress("address_line1", e.target.value)
-              }
-              required
-              className={fieldClass}
-            />
-
-            <input
-              type="text"
-              placeholder="Address Line 2 (Optional)"
-              autoComplete="address-line2"
-              value={addressFields.address_line2}
-              onChange={(e) =>
-                updateAddress("address_line2", e.target.value)
-              }
-              className={fieldClass}
-            />
-
-            <input
-              type="text"
-              placeholder="City"
-              autoComplete="address-level2"
-              value={addressFields.city}
-              onChange={(e) => updateAddress("city", e.target.value)}
-              required
-              className={fieldClass}
-            />
-
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <input
-                type="text"
-                placeholder="State"
-                autoComplete="address-level1"
-                value={addressFields.state}
-                onChange={(e) => updateAddress("state", e.target.value)}
-                required
-                className={fieldClass}
-              />
-
-              <input
-                type="text"
-                placeholder="PIN Code"
-                autoComplete="postal-code"
-                value={addressFields.postal_code}
-                onChange={(e) =>
-                  updateAddress("postal_code", e.target.value)
-                }
-                required
-                className={fieldClass}
-              />
+        {cart.length === 0 ? (
+          <section className="rounded-2xl border border-white/10 bg-[#111722] px-6 py-12 text-center">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-yellow-400/10 text-3xl text-yellow-400">
+              🛒
             </div>
-
-            <input
-              type="text"
-              placeholder="Country"
-              autoComplete="country-name"
-              value={addressFields.country}
-              onChange={(e) => updateAddress("country", e.target.value)}
-              required
-              className={fieldClass}
-            />
-
-            <div className="space-y-4 rounded-xl border border-gray-800 bg-gray-900 p-5">
-              <label className="flex cursor-pointer items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={saveAddress}
-                  onChange={(e) => {
-                    setSaveAddress(e.target.checked);
-                    if (!e.target.checked) setMakeDefault(false);
-                    setSelectedAddressId("");
-                  }}
-                  className="mt-1 h-4 w-4 accent-white"
-                />
-
-                <span>
-                  <span className="block font-semibold">
-                    Save this address for future orders
-                  </span>
-                  <span className="mt-1 block text-sm text-gray-400">
-                    This address will be available at your next checkout.
-                  </span>
+            <h2 className="mt-5 text-2xl font-bold">
+              Your cart is empty
+            </h2>
+            <p className="mt-3 text-gray-400">
+              Add products to your cart before proceeding to checkout.
+            </p>
+            <Link
+              href="/products"
+              className="mt-6 inline-flex rounded-xl bg-yellow-400 px-6 py-3 font-bold text-black transition hover:bg-yellow-300"
+            >
+              Browse Products
+            </Link>
+          </section>
+        ) : (
+          <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-5 lg:gap-8">
+            {/* Billing and shipping details */}
+            <section className="rounded-2xl border border-white/10 bg-[#111722] p-5 sm:p-7 lg:col-span-3">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400/10 font-black text-yellow-400">
+                  01
                 </span>
-              </label>
+                <div>
+                  <h2 className="text-xl font-bold sm:text-2xl">
+                    Billing Details
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-400">
+                    Enter your contact and delivery information.
+                  </p>
+                </div>
+              </div>
 
-              {saveAddress && (
-                <label className="flex cursor-pointer items-center gap-3 pl-7">
-                  <input
-                    type="checkbox"
-                    checked={makeDefault}
-                    onChange={(e) => setMakeDefault(e.target.checked)}
-                    className="h-4 w-4 accent-white"
-                  />
-                  <span className="text-sm">
-                    Make this my default address
-                  </span>
-                </label>
-              )}
-
-              <p className="text-sm text-gray-400">
-                Manage your saved addresses from{" "}
-                <button
-                  type="button"
-                  onClick={() => router.push("/account")}
-                  className="text-white underline underline-offset-4"
-                >
-                  My Account
-                </button>
-                .
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section>
-          <h2 className="mb-8 text-3xl font-bold">Order Summary</h2>
-
-          <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6 md:p-8">
-            <div className="space-y-6">
-              {cart.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between gap-4 border-b border-gray-800 pb-4"
-                >
+              <div className="space-y-5">
+                {savedAddresses.length > 0 && (
                   <div>
-                    <h3 className="font-bold">{item.title}</h3>
-                    <p className="mt-1 text-sm text-gray-400">
-                      Quantity: {item.quantity}
+                    <label
+                      htmlFor="saved-address"
+                      className="mb-2 block text-sm font-semibold text-gray-300"
+                    >
+                      Choose a Saved Address
+                    </label>
+
+                    <select
+                      id="saved-address"
+                      value={selectedAddressId}
+                      onChange={(e) => {
+                        const id = e.target.value;
+
+                        if (!id) {
+                          setSelectedAddressId("");
+                          setAddressFields(emptyAddress);
+                          setSaveAddress(false);
+                          setMakeDefault(false);
+                          return;
+                        }
+
+                        const saved = savedAddresses.find(
+                          (item) => item.id === id
+                        );
+
+                        if (saved) selectSavedAddress(saved);
+                      }}
+                      className={fieldClass}
+                    >
+                      <option value="">Enter a new address</option>
+                      {savedAddresses.map((saved) => (
+                        <option key={saved.id} value={saved.id}>
+                          {saved.full_name} — {saved.city}
+                          {saved.is_default ? " (Default)" : ""}
+                        </option>
+                      ))}
+                    </select>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      Select an address to fill in your details.
                     </p>
                   </div>
+                )}
 
-                  <div className="whitespace-nowrap font-bold">
-                    ₹
-                    {(
-                      Number(item.price) * item.quantity
-                    ).toLocaleString("en-IN")}
+                <div>
+                  <label
+                    htmlFor="checkout-name"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Full Name <span className="text-yellow-400">*</span>
+                  </label>
+                  <input
+                    id="checkout-name"
+                    type="text"
+                    placeholder="Enter your full name"
+                    autoComplete="name"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      setSelectedAddressId("");
+                    }}
+                    required
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="checkout-email"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    id="checkout-email"
+                    type="email"
+                    value={email}
+                    readOnly
+                    className={`${fieldClass} cursor-not-allowed bg-[#171e2b] text-gray-400`}
+                  />
+                  <p className="mt-2 text-xs text-gray-500">
+                    Your email is linked to your signed-in account.
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="checkout-phone"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Phone Number <span className="text-yellow-400">*</span>
+                  </label>
+                  <input
+                    id="checkout-phone"
+                    type="tel"
+                    placeholder="Enter your phone number"
+                    autoComplete="tel"
+                    value={phone}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                      setSelectedAddressId("");
+                    }}
+                    required
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div className="border-t border-white/10 pt-5">
+                  <h3 className="text-lg font-bold">
+                    Shipping Address
+                  </h3>
+                  <p className="mt-1 text-sm text-gray-400">
+                    Where should we deliver your order?
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="address-line1"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Address Line 1 <span className="text-yellow-400">*</span>
+                  </label>
+                  <input
+                    id="address-line1"
+                    type="text"
+                    placeholder="House number, building, street"
+                    autoComplete="address-line1"
+                    value={addressFields.address_line1}
+                    onChange={(e) =>
+                      updateAddress("address_line1", e.target.value)
+                    }
+                    required
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="address-line2"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Address Line 2{" "}
+                    <span className="font-normal text-gray-500">
+                      (Optional)
+                    </span>
+                  </label>
+                  <input
+                    id="address-line2"
+                    type="text"
+                    placeholder="Area, landmark, locality"
+                    autoComplete="address-line2"
+                    value={addressFields.address_line2}
+                    onChange={(e) =>
+                      updateAddress("address_line2", e.target.value)
+                    }
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="address-city"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    City <span className="text-yellow-400">*</span>
+                  </label>
+                  <input
+                    id="address-city"
+                    type="text"
+                    placeholder="Enter your city"
+                    autoComplete="address-level2"
+                    value={addressFields.city}
+                    onChange={(e) =>
+                      updateAddress("city", e.target.value)
+                    }
+                    required
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="address-state"
+                      className="mb-2 block text-sm font-semibold text-gray-300"
+                    >
+                      State <span className="text-yellow-400">*</span>
+                    </label>
+                    <input
+                      id="address-state"
+                      type="text"
+                      placeholder="State"
+                      autoComplete="address-level1"
+                      value={addressFields.state}
+                      onChange={(e) =>
+                        updateAddress("state", e.target.value)
+                      }
+                      required
+                      className={fieldClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="address-pin"
+                      className="mb-2 block text-sm font-semibold text-gray-300"
+                    >
+                      PIN Code <span className="text-yellow-400">*</span>
+                    </label>
+                    <input
+                      id="address-pin"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="PIN code"
+                      autoComplete="postal-code"
+                      value={addressFields.postal_code}
+                      onChange={(e) =>
+                        updateAddress("postal_code", e.target.value)
+                      }
+                      required
+                      className={fieldClass}
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
 
-            <div className="mt-10 flex items-center justify-between gap-4 border-t border-gray-800 pt-6">
-              <h3 className="text-2xl font-bold">Total</h3>
-              <div className="text-2xl font-bold md:text-3xl">
-                ₹{totalPrice.toLocaleString("en-IN")}
+                <div>
+                  <label
+                    htmlFor="address-country"
+                    className="mb-2 block text-sm font-semibold text-gray-300"
+                  >
+                    Country <span className="text-yellow-400">*</span>
+                  </label>
+                  <input
+                    id="address-country"
+                    type="text"
+                    placeholder="Country"
+                    autoComplete="country-name"
+                    value={addressFields.country}
+                    onChange={(e) =>
+                      updateAddress("country", e.target.value)
+                    }
+                    required
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div className="space-y-4 rounded-xl border border-white/10 bg-[#080a0f]/70 p-4 sm:p-5">
+                  <label className="flex cursor-pointer items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={saveAddress}
+                      onChange={(e) => {
+                        setSaveAddress(e.target.checked);
+                        if (!e.target.checked) setMakeDefault(false);
+                        setSelectedAddressId("");
+                      }}
+                      className="mt-1 h-4 w-4 accent-yellow-400"
+                    />
+
+                    <span>
+                      <span className="block font-semibold text-white">
+                        Save this address for future orders
+                      </span>
+                      <span className="mt-1 block text-sm leading-5 text-gray-400">
+                        Use this address again at your next checkout.
+                      </span>
+                    </span>
+                  </label>
+
+                  {saveAddress && (
+                    <label className="flex cursor-pointer items-center gap-3 pl-7">
+                      <input
+                        type="checkbox"
+                        checked={makeDefault}
+                        onChange={(e) => setMakeDefault(e.target.checked)}
+                        className="h-4 w-4 accent-yellow-400"
+                      />
+                      <span className="text-sm text-gray-300">
+                        Make this my default address
+                      </span>
+                    </label>
+                  )}
+
+                  <p className="text-sm text-gray-400">
+                    Manage saved addresses from{" "}
+                    <button
+                      type="button"
+                      onClick={() => router.push("/account")}
+                      className="font-semibold text-yellow-400 underline underline-offset-4 transition hover:text-yellow-300"
+                    >
+                      My Account
+                    </button>
+                    .
+                  </p>
+                </div>
               </div>
-            </div>
+            </section>
 
-            <button
-              onClick={handlePlaceOrder}
-              disabled={loading || checkingAuth || cart.length === 0}
-              className="mt-10 w-full rounded-xl bg-white py-4 font-bold text-black transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {loading ? "Placing Order..." : "Place Order"}
-            </button>
+            {/* Order summary */}
+            <section className="rounded-2xl border border-white/10 bg-[#111722] p-5 sm:p-7 lg:sticky lg:top-6 lg:col-span-2">
+              <div className="mb-6 flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400/10 font-black text-yellow-400">
+                  02
+                </span>
+                <div>
+                  <h2 className="text-xl font-bold sm:text-2xl">
+                    Order Summary
+                  </h2>
+                  <p className="mt-1 text-sm text-gray-400">
+                    Review your items before ordering.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mb-5 flex items-center justify-between rounded-xl border border-white/10 bg-[#080a0f]/70 px-4 py-3">
+                <span className="text-sm text-gray-400">
+                  Items in your order
+                </span>
+                <span className="font-bold text-yellow-400">
+                  {cart.reduce((total, item) => total + item.quantity, 0)}
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {cart.map((item, index) => (
+                  <div
+                    key={`${item.id}-${index}`}
+                    className="flex justify-between gap-4 border-b border-white/10 pb-4"
+                  >
+                    <div className="min-w-0">
+                      <h3 className="font-semibold leading-6 text-white">
+                        {item.title}
+                      </h3>
+                      <p className="mt-1 text-sm text-gray-400">
+                        Quantity: {item.quantity}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        ₹{Number(item.price).toLocaleString("en-IN")} each
+                      </p>
+                    </div>
+
+                    <div className="shrink-0 text-right font-bold text-white">
+                      ₹
+                      {(
+                        Number(item.price) * item.quantity
+                      ).toLocaleString("en-IN")}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span>Subtotal</span>
+                  <span>₹{totalPrice.toLocaleString("en-IN")}</span>
+                </div>
+                <div className="flex items-center justify-between text-sm text-gray-400">
+                  <span>Shipping</span>
+                  <span className="text-gray-300">
+                    To be confirmed
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-5 flex items-end justify-between gap-4 border-t border-white/10 pt-5">
+                <div>
+                  <h3 className="text-lg font-bold">Order Total</h3>
+                  <p className="mt-1 text-xs text-gray-500">
+                    Based on current cart prices
+                  </p>
+                </div>
+                <div className="text-right text-2xl font-black text-yellow-400 sm:text-3xl">
+                  ₹{totalPrice.toLocaleString("en-IN")}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handlePlaceOrder}
+                disabled={loading || checkingAuth || cart.length === 0}
+                className="mt-7 w-full rounded-xl bg-yellow-400 py-4 font-bold text-black shadow-lg shadow-yellow-400/10 transition hover:bg-yellow-300 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {loading ? (
+                  <span className="inline-flex items-center justify-center gap-2">
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
+                    Placing Order...
+                  </span>
+                ) : (
+                  "Place Order →"
+                )}
+              </button>
+
+              <p className="mt-4 text-center text-xs leading-5 text-gray-500">
+                Please verify your delivery details before placing your order.
+              </p>
+
+              <div className="mt-5 flex items-center justify-center gap-2 border-t border-white/10 pt-4 text-xs text-gray-500">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  className="h-4 w-4 text-yellow-400"
+                  aria-hidden="true"
+                >
+                  <rect x="5" y="10" width="14" height="11" rx="2" />
+                  <path
+                    d="M8 10V7a4 4 0 0 1 8 0v3"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                Secure account-based checkout
+              </div>
+            </section>
           </div>
-        </section>
+        )}
       </div>
     </main>
   );

@@ -333,44 +333,45 @@ export default function CustomerAccountPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-black p-8 text-white">
+      <main className="min-h-screen bg-[#080b12] p-8 text-white">
         <p className="text-gray-300">Loading your account...</p>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black px-4 py-8 text-white md:px-8">
+    <main className="min-h-screen bg-[#080b12] px-4 py-8 text-white md:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold md:text-5xl">My Account</h1>
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.22em] text-yellow-400">Dealstack customer portal</p>
+            <h1 className="text-3xl font-extrabold md:text-5xl">My Account</h1>
             <p className="mt-3 break-all text-gray-400">{email}</p>
           </div>
 
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="rounded-xl bg-red-600 px-5 py-3 font-semibold hover:bg-red-700 disabled:opacity-50"
+            className="rounded-xl border border-red-500/40 bg-red-500/10 px-5 py-3 font-semibold text-red-300 transition hover:bg-red-500/20 disabled:opacity-50"
           >
             {loggingOut ? "Logging out..." : "Log Out"}
           </button>
         </div>
 
         <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+          <div className="rounded-2xl border border-white/10 bg-[#0e131d] p-6">
             <p className="text-gray-400">Total Orders</p>
             <p className="mt-2 text-3xl font-bold">{orders.length}</p>
           </div>
 
-          <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+          <div className="rounded-2xl border border-white/10 bg-[#0e131d] p-6">
             <p className="text-gray-400">Total Order Value</p>
             <p className="mt-2 text-3xl font-bold">
               ₹{totalSpent.toLocaleString("en-IN")}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6">
+          <div className="rounded-2xl border border-white/10 bg-[#0e131d] p-6">
             <p className="text-gray-400">Account</p>
             <p className="mt-2 text-xl font-bold">Customer</p>
             <p className="mt-1 text-sm text-gray-400">Dealstack Member</p>
@@ -392,7 +393,7 @@ export default function CustomerAccountPage() {
             <button
               type="button"
               onClick={startAddAddress}
-              className="rounded-xl bg-white px-5 py-3 font-bold text-black hover:bg-gray-200"
+              className="rounded-xl bg-yellow-400 px-5 py-3 font-bold text-black transition hover:bg-yellow-300"
             >
               + Add Address
             </button>
@@ -401,7 +402,7 @@ export default function CustomerAccountPage() {
           {showAddressForm && (
             <form
               onSubmit={handleSaveAddress}
-              className="mb-6 space-y-5 rounded-2xl border border-gray-800 bg-gray-900 p-5 md:p-7"
+              className="mb-6 space-y-5 rounded-2xl border border-white/10 bg-[#0e131d] p-5 md:p-7"
             >
               <h3 className="text-xl font-bold">
                 {editingAddressId ? "Edit Address" : "New Shipping Address"}
@@ -416,7 +417,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("full_name", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
 
                 <input
@@ -428,7 +429,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("phone", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
 
                 <input
@@ -439,7 +440,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("address_line1", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white md:col-span-2"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400 md:col-span-2"
                 />
 
                 <input
@@ -449,7 +450,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("address_line2", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white md:col-span-2"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400 md:col-span-2"
                 />
 
                 <input
@@ -458,7 +459,7 @@ export default function CustomerAccountPage() {
                   autoComplete="address-level2"
                   value={addressForm.city}
                   onChange={(e) => updateAddressField("city", e.target.value)}
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
 
                 <input
@@ -467,7 +468,7 @@ export default function CustomerAccountPage() {
                   autoComplete="address-level1"
                   value={addressForm.state}
                   onChange={(e) => updateAddressField("state", e.target.value)}
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
 
                 <input
@@ -478,7 +479,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("postal_code", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
 
                 <input
@@ -489,7 +490,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("country", e.target.value)
                   }
-                  className="w-full rounded-xl border border-gray-700 bg-black px-4 py-3 outline-none focus:border-white"
+                  className="w-full rounded-xl border border-white/10 bg-[#080b12] px-4 py-3 outline-none focus:border-yellow-400"
                 />
               </div>
 
@@ -500,7 +501,7 @@ export default function CustomerAccountPage() {
                   onChange={(e) =>
                     updateAddressField("is_default", e.target.checked)
                   }
-                  className="h-4 w-4 accent-white"
+                  className="h-4 w-4 accent-yellow-400"
                 />
                 Set as my default shipping address
               </label>
@@ -509,7 +510,7 @@ export default function CustomerAccountPage() {
                 <button
                   type="submit"
                   disabled={savingAddress}
-                  className="rounded-xl bg-white px-6 py-3 font-bold text-black hover:bg-gray-200 disabled:opacity-50"
+                  className="rounded-xl bg-yellow-400 px-6 py-3 font-bold text-black transition hover:bg-yellow-300 disabled:opacity-50"
                 >
                   {savingAddress ? "Saving..." : "Save Address"}
                 </button>
@@ -521,7 +522,7 @@ export default function CustomerAccountPage() {
                     setEditingAddressId(null);
                     setAddressForm(emptyAddress);
                   }}
-                  className="rounded-xl border border-gray-700 px-6 py-3 font-semibold hover:border-white"
+                  className="rounded-xl border border-white/10 px-6 py-3 font-semibold hover:border-yellow-400"
                 >
                   Cancel
                 </button>
@@ -530,7 +531,7 @@ export default function CustomerAccountPage() {
           )}
 
           {addresses.length === 0 ? (
-            <div className="rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center">
+            <div className="rounded-2xl border border-white/10 bg-[#0e131d] p-8 text-center">
               <h3 className="text-xl font-semibold">No saved addresses</h3>
               <p className="mt-2 text-gray-400">
                 Add an address to make your next checkout faster.
@@ -541,12 +542,12 @@ export default function CustomerAccountPage() {
               {addresses.map((address) => (
                 <article
                   key={address.id}
-                  className="rounded-2xl border border-gray-800 bg-gray-900 p-5 md:p-6"
+                  className="rounded-2xl border border-white/10 bg-[#0e131d] p-5 md:p-6"
                 >
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <h3 className="text-lg font-bold">{address.full_name}</h3>
                     {address.is_default && (
-                      <span className="rounded-full border border-green-700 px-3 py-1 text-xs text-green-400">
+                      <span className="rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-xs text-green-300">
                         Default
                       </span>
                     )}
@@ -564,7 +565,7 @@ export default function CustomerAccountPage() {
                     {address.country}
                   </p>
 
-                  <div className="mt-5 flex flex-wrap gap-3 border-t border-gray-800 pt-4">
+                  <div className="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
                     <button
                       type="button"
                       onClick={() => startEditAddress(address)}
@@ -604,13 +605,13 @@ export default function CustomerAccountPage() {
               My Order History
             </h2>
 
-            <Link href="/" className="text-white underline underline-offset-4">
+            <Link href="/" className="text-yellow-400 underline underline-offset-4 hover:text-yellow-300">
               Continue Shopping
             </Link>
           </div>
 
           {orders.length === 0 ? (
-            <div className="rounded-2xl border border-gray-800 bg-gray-900 p-8 text-center">
+            <div className="rounded-2xl border border-white/10 bg-[#0e131d] p-8 text-center">
               <h3 className="text-xl font-semibold">No orders yet</h3>
               <p className="mt-2 text-gray-400">
                 Your orders will appear here after you place an order while
@@ -618,7 +619,7 @@ export default function CustomerAccountPage() {
               </p>
               <Link
                 href="/"
-                className="mt-6 inline-block rounded-xl bg-white px-6 py-3 font-bold text-black hover:bg-gray-200"
+                className="mt-6 inline-block rounded-xl bg-yellow-400 px-6 py-3 font-bold text-black transition hover:bg-yellow-300"
               >
                 Start Shopping
               </Link>
@@ -628,7 +629,7 @@ export default function CustomerAccountPage() {
               {orders.map((order) => (
                 <article
                   key={order.id}
-                  className="rounded-2xl border border-gray-800 bg-gray-900 p-5 transition hover:border-gray-600 md:p-6"
+                  className="rounded-2xl border border-white/10 bg-[#0e131d] p-5 transition hover:border-yellow-400/15 md:p-6"
                 >
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 sm:items-center">
                     <div>
@@ -651,7 +652,7 @@ export default function CustomerAccountPage() {
 
                     <div>
                       <p className="text-sm text-gray-400">Order Status</p>
-                      <span className="mt-2 inline-block rounded-full border border-gray-700 px-3 py-1 text-sm">
+                      <span className="mt-2 inline-block rounded-full border border-white/10 px-3 py-1 text-sm">
                         {order.status || "Pending"}
                       </span>
                     </div>
@@ -665,17 +666,17 @@ export default function CustomerAccountPage() {
                     </div>
                   </div>
 
-                  <div className="mt-5 flex flex-wrap gap-3 border-t border-gray-800 pt-4">
+                  <div className="mt-5 flex flex-wrap gap-3 border-t border-white/10 pt-4">
                     <Link
                       href={`/account/orders/${order.id}`}
-                      className="rounded-lg bg-white px-4 py-2 font-semibold text-black hover:bg-gray-200"
+                      className="rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-black transition hover:bg-yellow-300"
                     >
                       View Details
                     </Link>
 
                     <Link
                       href={`/account/orders/${order.id}?download=1`}
-                      className="rounded-lg border border-gray-600 px-4 py-2 font-semibold text-white hover:border-white"
+                      className="rounded-lg border border-white/15 px-4 py-2 font-semibold text-white hover:border-yellow-400"
                     >
                       Download Order PDF
                     </Link>

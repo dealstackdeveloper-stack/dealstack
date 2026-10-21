@@ -1,7 +1,11 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+
+const inputClass =
+  "w-full rounded-xl border border-white/10 bg-[#090d15] px-4 py-3.5 text-white placeholder:text-gray-500 outline-none transition focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/10";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -34,113 +38,161 @@ export default function ContactPage() {
     setSubmitted(true);
   }
 
-  const inputClass =
-    "w-full rounded-xl border border-gray-700 bg-black px-4 py-3 text-white outline-none transition placeholder:text-gray-500 focus:border-white";
-
   return (
-    <main className="min-h-screen bg-black px-4 py-12 text-white md:px-8">
+    <main className="min-h-screen bg-[#080b12] px-4 py-12 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        {/* Page Heading */}
-        <div className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-gray-400">
+        <Link href="/" className="mb-12 inline-flex items-center gap-3">
+          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400 text-lg font-black text-black">
+            D
+          </span>
+          <span className="text-xl font-extrabold tracking-tight">
+            dealstack<span className="text-yellow-400">.</span>
+          </span>
+        </Link>
+
+        <header className="mb-12 max-w-3xl">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-yellow-400">
             We are here to help
           </p>
 
-          <h1 className="text-4xl font-extrabold md:text-6xl">
-            Contact Dealstack
+          <h1 className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+            Let’s talk.
+            <span className="text-yellow-400"> We’re listening.</span>
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-gray-400 md:text-lg">
-            Have a question about a product, an order, delivery, or a business
-            enquiry? Send us a message and we will help you find the right
+          <p className="mt-5 max-w-2xl text-base leading-7 text-gray-400 sm:text-lg">
+            Questions about a product, an order, delivery, or a business
+            enquiry? Contact our team and we’ll help you find the right
             solution.
           </p>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-5">
-          {/* Contact Information */}
-          <section className="space-y-5 lg:col-span-2">
-            <div className="rounded-2xl border border-gray-800 bg-gray-900 p-6 md:p-8">
-              <h2 className="text-2xl font-bold">Get in Touch</h2>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-5 lg:gap-8">
+          <aside className="space-y-5 lg:col-span-2">
+            <section className="rounded-2xl border border-white/10 bg-[#101621] p-6 sm:p-8">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-yellow-400">
+                Contact information
+              </p>
 
-              <p className="mt-3 leading-7 text-gray-400">
-                Contact our team for assistance with your shopping experience
-                and enquiries.
+              <h2 className="mt-3 text-2xl font-bold">Get in touch</h2>
+
+              <p className="mt-3 text-sm leading-7 text-gray-400">
+                Choose the right contact for your enquiry. For order-related
+                questions, include your order ID in your message.
               </p>
 
               <div className="mt-8 space-y-6">
-                <div>
-                  <p className="text-sm text-gray-400">Email Support</p>
-                  <a
-                    href="mailto:support@dealstack.in"
-                    className="mt-1 inline-block break-all font-semibold hover:text-gray-300"
-                  >
-                    support@dealstack.in
-                  </a>
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-lg text-yellow-400">
+                    @
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      Customer support
+                    </p>
+                    <a
+                      href="mailto:support@dealstack.in"
+                      className="mt-1 block break-all font-semibold transition hover:text-yellow-400"
+                    >
+                      support@dealstack.in
+                    </a>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="text-sm text-gray-400">Sales Enquiries</p>
-                  <a
-                    href="mailto:sales@dealstack.in"
-                    className="mt-1 inline-block break-all font-semibold hover:text-gray-300"
-                  >
-                    sales@dealstack.in
-                  </a>
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-lg text-yellow-400">
+                    ↗
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      Sales enquiries
+                    </p>
+                    <a
+                      href="mailto:sales@dealstack.in"
+                      className="mt-1 block break-all font-semibold transition hover:text-yellow-400"
+                    >
+                      sales@dealstack.in
+                    </a>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="text-sm text-gray-400">Website</p>
-                  <Link
-                    href="/"
-                    className="mt-1 inline-block font-semibold hover:text-gray-300"
-                  >
-                    www.dealstack.in
-                  </Link>
+                <div className="flex gap-4">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-yellow-400/20 bg-yellow-400/10 text-lg text-yellow-400">
+                    ↗
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      Website
+                    </p>
+                    <Link
+                      href="/"
+                      className="mt-1 block font-semibold transition hover:text-yellow-400"
+                    >
+                      www.dealstack.in
+                    </Link>
+                  </div>
                 </div>
               </div>
 
-              <div className="mt-8 border-t border-gray-800 pt-6">
-                <p className="text-sm leading-6 text-gray-400">
-                  For order-related enquiries, please include your order ID so
-                  our team can identify your purchase more easily.
+              <div className="mt-8 rounded-xl border border-white/10 bg-[#090d15] p-5">
+                <h3 className="font-bold">Need order assistance?</h3>
+                <p className="mt-2 text-sm leading-6 text-gray-400">
+                  Check your order history and keep your order ID handy before
+                  contacting support.
                 </p>
-
                 <Link
                   href="/account"
-                  className="mt-4 inline-block font-semibold underline underline-offset-4 hover:text-gray-300"
+                  className="mt-4 inline-flex items-center gap-2 font-semibold text-yellow-400 transition hover:text-yellow-300"
                 >
-                  View My Orders
+                  View my orders <span aria-hidden="true">→</span>
                 </Link>
               </div>
+            </section>
+
+            <div className="rounded-2xl border border-yellow-400/20 bg-yellow-400/[0.06] p-6">
+              <p className="text-sm font-bold text-yellow-300">
+                A quick note
+              </p>
+              <p className="mt-2 text-sm leading-6 text-gray-400">
+                Submitting this form opens your default email application.
+                Your enquiry is sent only after you send that email.
+              </p>
             </div>
-          </section>
+          </aside>
 
-          {/* Contact Form */}
-          <section className="rounded-2xl border border-gray-800 bg-gray-900 p-6 md:p-8 lg:col-span-3">
-            <h2 className="text-2xl font-bold">Send Us a Message</h2>
-
-            <p className="mt-2 text-sm text-gray-400">
-              Complete the form below to prepare an enquiry email.
-            </p>
+          <section className="rounded-2xl border border-white/10 bg-[#101621] p-6 sm:p-8 lg:col-span-3">
+            <div className="mb-8">
+              <p className="text-sm font-bold uppercase tracking-[0.15em] text-yellow-400">
+                Send an enquiry
+              </p>
+              <h2 className="mt-3 text-2xl font-bold sm:text-3xl">
+                How can we help?
+              </h2>
+              <p className="mt-3 text-sm leading-6 text-gray-400">
+                Fill in the details below to prepare your email to our support
+                team.
+              </p>
+            </div>
 
             {submitted && (
-              <div className="mt-5 rounded-xl border border-green-800 bg-green-950/40 p-4 text-sm text-green-300">
-                Your email application should open with your enquiry details.
-                Please send the email to submit your enquiry.
+              <div
+                role="status"
+                className="mb-6 rounded-xl border border-yellow-400/30 bg-yellow-400/10 p-4 text-sm leading-6 text-yellow-200"
+              >
+                Your email application should have opened. Please send the
+                prepared email to submit your enquiry.
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="mt-7 space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="contact-name"
                     className="mb-2 block text-sm font-medium text-gray-300"
                   >
-                    Full Name *
+                    Full name *
                   </label>
-
                   <input
                     id="contact-name"
                     required
@@ -160,9 +212,8 @@ export default function ContactPage() {
                     htmlFor="contact-email"
                     className="mb-2 block text-sm font-medium text-gray-300"
                   >
-                    Email Address *
+                    Email address *
                   </label>
-
                   <input
                     id="contact-email"
                     required
@@ -185,9 +236,8 @@ export default function ContactPage() {
                     htmlFor="contact-phone"
                     className="mb-2 block text-sm font-medium text-gray-300"
                   >
-                    Phone Number
+                    Phone number
                   </label>
-
                   <input
                     id="contact-phone"
                     type="tel"
@@ -207,9 +257,8 @@ export default function ContactPage() {
                     htmlFor="contact-subject"
                     className="mb-2 block text-sm font-medium text-gray-300"
                   >
-                    Subject *
+                    Enquiry type *
                   </label>
-
                   <select
                     id="contact-subject"
                     required
@@ -222,71 +271,73 @@ export default function ContactPage() {
                     <option value="" disabled>
                       Select enquiry type
                     </option>
-                    <option value="Product Enquiry">Product Enquiry</option>
-                    <option value="Order Status">Order Status</option>
+                    <option value="Product Enquiry">Product enquiry</option>
+                    <option value="Order Status">Order status</option>
                     <option value="Shipping and Delivery">
-                      Shipping and Delivery
+                      Shipping and delivery
                     </option>
                     <option value="Return or Replacement">
-                      Return or Replacement
+                      Return or replacement
                     </option>
-                    <option value="Payment Enquiry">Payment Enquiry</option>
-                    <option value="Business Enquiry">Business Enquiry</option>
+                    <option value="Payment Enquiry">Payment enquiry</option>
+                    <option value="Business Enquiry">Business enquiry</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
 
               <div>
-                <label
-                  htmlFor="contact-message"
-                  className="mb-2 block text-sm font-medium text-gray-300"
-                >
-                  Your Message *
-                </label>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <label
+                    htmlFor="contact-message"
+                    className="text-sm font-medium text-gray-300"
+                  >
+                    Your message *
+                  </label>
+                  <span className="text-xs text-gray-500">
+                    {form.message.length}/5000
+                  </span>
+                </div>
 
                 <textarea
                   id="contact-message"
                   required
                   minLength={10}
                   maxLength={5000}
-                  rows={6}
+                  rows={7}
                   value={form.message}
                   onChange={(event) =>
                     setForm({ ...form, message: event.target.value })
                   }
-                  placeholder="How can we help you?"
+                  placeholder="Tell us how we can help..."
                   className={`${inputClass} resize-y`}
                 />
-
-                <p className="mt-2 text-right text-xs text-gray-500">
-                  {form.message.length}/5000 characters
-                </p>
               </div>
 
               <button
                 type="submit"
-                className="w-full rounded-xl bg-white px-6 py-4 font-bold text-black transition hover:bg-gray-200"
+                className="w-full rounded-xl bg-yellow-400 px-6 py-4 font-bold text-black transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-[#101621]"
               >
-                Prepare Enquiry Email →
+                Prepare enquiry email <span aria-hidden="true">→</span>
               </button>
 
               <p className="text-xs leading-5 text-gray-500">
-                This form opens your default email application. Your enquiry is
-                not submitted to Dealstack until you send the email.
+                This form does not send data directly to a server. Your default
+                email application will open with the enquiry details.
               </p>
             </form>
           </section>
         </div>
 
-        <div className="mt-12 text-center">
+        <footer className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-sm text-gray-500 sm:flex-row">
+          <p>© {new Date().getFullYear()} Dealstack. All rights reserved.</p>
           <Link
             href="/"
-            className="text-sm text-gray-400 underline underline-offset-4 hover:text-white"
+            className="transition hover:text-yellow-400"
           >
-            ← Back to Home
+            ← Back to shopping
           </Link>
-        </div>
+        </footer>
       </div>
     </main>
   );
