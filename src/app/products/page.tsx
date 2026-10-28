@@ -1,9 +1,9 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 type Product = {
@@ -16,9 +16,6 @@ type Product = {
 };
 
 export default function ProductsPage() {
-  const searchParams = useSearchParams();
-  const categoryFromUrl = searchParams.get("category") ?? "";
-
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -26,6 +23,16 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
 
+  // Read the category query parameter in the browser.
+  // This avoids useSearchParams() during static prerendering.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const categoryFromUrl = params.get("category") ?? "";
+
+    setSelectedCategory(categoryFromUrl || "All");
+  }, []);
+
+  // Fetch products from Supabase.
   useEffect(() => {
     let cancelled = false;
 
@@ -70,10 +77,6 @@ export default function ProductsPage() {
     };
   }, []);
 
-  useEffect(() => {
-    setSelectedCategory(categoryFromUrl || "All");
-  }, [categoryFromUrl]);
-
   const filteredProducts = products.filter((product) => {
     const matchesCategory =
       selectedCategory === "All" ||
@@ -91,7 +94,7 @@ export default function ProductsPage() {
 
   return (
     <main className="min-h-screen bg-white text-slate-900">
-      {/* Compact catalogue header with filters on the right */}
+      {/* Catalogue header */}
       <section className="border-b border-slate-800 bg-gradient-to-br from-[#101827] to-[#080a0f] text-white">
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-10">
           <Link
@@ -103,7 +106,6 @@ export default function ProductsPage() {
           </Link>
 
           <div className="mt-4 grid items-center gap-6 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
-            {/* Left: Catalogue title */}
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-yellow-400">
                 Dealstack Store
@@ -122,12 +124,14 @@ export default function ProductsPage() {
                 <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs text-slate-200">
                   <span className="h-2 w-2 rounded-full bg-yellow-400" />
                   {products.length}{" "}
-                  {products.length === 1 ? "product available" : "products available"}
+                  {products.length === 1
+                    ? "product available"
+                    : "products available"}
                 </div>
               )}
             </div>
 
-            {/* Right: Search and category filters */}
+            {/* Search and category filters */}
             <div className="min-w-0 rounded-2xl border border-white/15 bg-white/5 p-4 shadow-xl backdrop-blur-sm sm:p-5">
               <label
                 htmlFor="product-search"
