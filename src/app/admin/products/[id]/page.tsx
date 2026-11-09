@@ -54,6 +54,7 @@ export default function EditProductPage() {
   const [modelNumber, setModelNumber] = useState("");
   const [sku, setSku] = useState("");
   const [category, setCategory] = useState("Surveillance Systems");
+  const [subcategory, setSubcategory] = useState("");
   const [price, setPrice] = useState("");
   const [mrp, setMrp] = useState("");
   const [gstRate, setGstRate] = useState("18");
@@ -92,6 +93,7 @@ export default function EditProductPage() {
       setModelNumber(String(data.model_number ?? ""));
       setSku(String(data.sku ?? ""));
       setCategory(String(data.category ?? "Surveillance Systems"));
+      setSubcategory(String(data.subcategory ?? ""));
       setPrice(String(data.price ?? ""));
       setMrp(data.mrp == null ? "" : String(data.mrp));
       setGstRate(data.gst_rate == null ? "18" : String(data.gst_rate));
@@ -156,7 +158,7 @@ export default function EditProductPage() {
     setSaving(true);
     const { error } = await supabase.from("products").update({
       title: title.trim(), brand: brand.trim() || null, model_number: modelNumber.trim() || null,
-      sku: sku.trim() || null, category: category.trim(), price: String(numericPrice), mrp: numericMrp,
+      sku: sku.trim() || null, category: category.trim(), subcategory: subcategory.trim() || null, price: String(numericPrice), mrp: numericMrp,
       gst_rate: numericGst, stock: numericStock, image: image.trim(), slug,
       short_description: shortDescription.trim() || null, description: description.trim() || null,
       gallery_images: linesToArray(galleryImages), features: linesToArray(features),
@@ -194,6 +196,7 @@ export default function EditProductPage() {
               <div><label className={labelClass}>Model Number</label><input className={inputClass} value={modelNumber} onChange={(e) => setModelNumber(e.target.value)} /></div>
               <div><label className={labelClass}>SKU</label><input className={inputClass} value={sku} onChange={(e) => setSku(e.target.value)} /></div>
               <div><label className={labelClass}>Category *</label><select className={inputClass} value={category} onChange={(e) => setCategory(e.target.value)} required><option>Surveillance Systems</option><option>Networking Switches &amp; Routers</option><option>Surveillance Hard Disk</option><option>Gadget &amp; Accessories</option><option value={category}>{category}</option></select></div>
+              <div><label className={labelClass}>Subcategory</label><input className={inputClass} value={subcategory} onChange={(e) => setSubcategory(e.target.value)} placeholder="e.g. IP Cameras, NVR, PoE Switch" /></div>
             </div>
           </section>
 

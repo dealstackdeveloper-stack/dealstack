@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import CategoryCard from "@/components/CategoryCard";
+import Footer from "@/components/Footer"; 
 
 type Product = {
   id: number;
@@ -412,38 +413,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-slate-950 px-5 py-12 text-white sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 sm:flex-row">
-          <div>
-            <Link href="/" className="text-2xl font-black tracking-wide">
-              Deal<span className="text-yellow-400">stack</span>
-            </Link>
-
-            <p className="mt-3 max-w-md text-sm leading-6 text-slate-400">
-              Technology products for security, networking and everyday
-              connectivity.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300">
-            <Link href="/products" className="hover:text-yellow-300">
-              Products
-            </Link>
-
-            <Link href="/contact" className="hover:text-yellow-300">
-              Contact
-            </Link>
-
-            <Link href="/account" className="hover:text-yellow-300">
-              My Account
-            </Link>
-          </div>
-        </div>
-
-        <div className="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-5 text-xs text-slate-500">
-          © 2026 Dealstack. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

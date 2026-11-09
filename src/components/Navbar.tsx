@@ -44,6 +44,7 @@ function Icon({
           <path d="M5 9v12h14V9M9 21v-7h6v7" />
         </svg>
       );
+
     case "package":
       return (
         <svg {...common}>
@@ -51,6 +52,7 @@ function Icon({
           <path d="m3 8 9 5 9-5M3 8v9l9 5 9-5V8M12 13v9" />
         </svg>
       );
+
     case "grid":
       return (
         <svg {...common}>
@@ -60,6 +62,7 @@ function Icon({
           <rect x="14" y="14" width="7" height="7" rx="1.5" />
         </svg>
       );
+
     case "mail":
       return (
         <svg {...common}>
@@ -67,6 +70,7 @@ function Icon({
           <path d="m3 7 9 6 9-6" />
         </svg>
       );
+
     case "cart":
       return (
         <svg {...common}>
@@ -75,6 +79,7 @@ function Icon({
           <circle cx="18" cy="20" r="1" />
         </svg>
       );
+
     case "user":
       return (
         <svg {...common}>
@@ -82,6 +87,7 @@ function Icon({
           <path d="M4 21a8 8 0 0 1 16 0" />
         </svg>
       );
+
     case "logout":
       return (
         <svg {...common}>
@@ -89,6 +95,7 @@ function Icon({
           <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" />
         </svg>
       );
+
     case "shield":
       return (
         <svg {...common}>
@@ -101,6 +108,7 @@ function Icon({
 
 export default function Navbar() {
   const { cart } = useCart();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -121,7 +129,7 @@ export default function Navbar() {
       }
     }
 
-    loadUser();
+    void loadUser();
 
     const {
       data: { subscription },
@@ -180,9 +188,8 @@ export default function Navbar() {
     "inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-gray-300 transition hover:text-yellow-400";
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/10 bg-black text-white shadow-lg shadow-black/20">
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#080b12] text-white shadow-lg shadow-white/20">
       <div className="mx-auto flex min-h-[76px] max-w-[1600px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-
         {/* Dealstack brand logo */}
         <Link
           href="/"
@@ -200,19 +207,21 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop navigation */}
-        <ul className="hidden items-center gap-5 xl:gap-8 md:flex">
+        <ul className="hidden items-center gap-5 md:flex xl:gap-8">
           <li>
             <Link href="/" className={navLinkClass}>
               <Icon name="home" className="h-[18px] w-[18px]" />
               Home
             </Link>
           </li>
+
           <li>
             <Link href="/products" className={navLinkClass}>
               <Icon name="package" className="h-[18px] w-[18px]" />
               Products
             </Link>
           </li>
+
           <li>
             <button
               type="button"
@@ -223,6 +232,7 @@ export default function Navbar() {
               Categories
             </button>
           </li>
+
           <li>
             <Link href="/contact" className={navLinkClass}>
               <Icon name="mail" className="h-[18px] w-[18px]" />
@@ -233,7 +243,6 @@ export default function Navbar() {
 
         {/* Cart and account actions */}
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-
           {/* Shopping cart */}
           <Link
             href="/cart"
@@ -250,8 +259,8 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop account controls */}
-          {!authLoading && (
-            user ? (
+          {!authLoading &&
+            (user ? (
               <div className="hidden items-center gap-2 md:flex">
                 <Link
                   href="/account"
@@ -261,6 +270,7 @@ export default function Navbar() {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-yellow-400 text-black">
                     <Icon name="user" className="h-4 w-4" />
                   </span>
+
                   <span className="max-w-28 truncate text-sm font-semibold">
                     {user.user_metadata?.full_name ||
                       user.email ||
@@ -275,7 +285,9 @@ export default function Navbar() {
                   className="inline-flex h-11 items-center gap-2 rounded-xl bg-white px-3 text-sm font-bold text-black transition hover:bg-yellow-400 disabled:opacity-50"
                 >
                   <Icon name="logout" className="h-4 w-4" />
-                  <span>{signingOut ? "Logging out..." : "Log out"}</span>
+                  <span>
+                    {signingOut ? "Logging out..." : "Log out"}
+                  </span>
                 </button>
               </div>
             ) : (
@@ -287,15 +299,8 @@ export default function Navbar() {
                   <Icon name="user" className="h-4 w-4" />
                   Log in
                 </Link>
-                <Link
-                  href="/signup"
-                  className="inline-flex h-11 items-center rounded-xl bg-yellow-400 px-4 text-sm font-bold text-black transition hover:bg-yellow-300"
-                >
-                  Sign up
-                </Link>
               </div>
-            )
-          )}
+            ))}
 
           {/* Mobile menu toggle */}
           <button
@@ -323,6 +328,7 @@ export default function Navbar() {
                 <Icon name="home" /> Home
               </Link>
             </li>
+
             <li>
               <Link
                 href="/products"
@@ -332,6 +338,7 @@ export default function Navbar() {
                 <Icon name="package" /> Products
               </Link>
             </li>
+
             <li>
               <button
                 type="button"
@@ -341,6 +348,7 @@ export default function Navbar() {
                 <Icon name="grid" /> Categories
               </button>
             </li>
+
             <li>
               <Link
                 href="/contact"
@@ -353,8 +361,8 @@ export default function Navbar() {
 
             <li className="my-2 border-t border-white/10" />
 
-            {!authLoading && (
-              user ? (
+            {!authLoading &&
+              (user ? (
                 <>
                   <li className="px-3 py-2 text-xs text-gray-400">
                     Signed in as
@@ -362,6 +370,7 @@ export default function Navbar() {
                       {user.email}
                     </span>
                   </li>
+
                   <li>
                     <Link
                       href="/account"
@@ -371,6 +380,7 @@ export default function Navbar() {
                       <Icon name="user" /> My Account
                     </Link>
                   </li>
+
                   <li>
                     <button
                       type="button"
@@ -384,38 +394,16 @@ export default function Navbar() {
                   </li>
                 </>
               ) : (
-                <>
-                  <li>
-                    <Link
-                      href="/customer-login"
-                      onClick={closeMenu}
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-gray-200 transition hover:bg-white/5 hover:text-yellow-400"
-                    >
-                      <Icon name="user" /> Customer Log in
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/signup"
-                      onClick={closeMenu}
-                      className="flex items-center gap-3 rounded-lg px-3 py-3 text-gray-200 transition hover:bg-white/5 hover:text-yellow-400"
-                    >
-                      <Icon name="user" /> Customer Sign up
-                    </Link>
-                  </li>
-                </>
-              )
-            )}
-
-            <li className="mt-2 border-t border-white/10 pt-3">
-              <Link
-                href="/login"
-                onClick={closeMenu}
-                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-gray-400 transition hover:text-yellow-400"
-              >
-                <Icon name="shield" /> Admin Login
-              </Link>
-            </li>
+                <li>
+                  <Link
+                    href="/customer-login"
+                    onClick={closeMenu}
+                    className="flex items-center gap-3 rounded-lg px-3 py-3 text-gray-200 transition hover:bg-white/5 hover:text-yellow-400"
+                  >
+                    <Icon name="user" /> Customer Log in
+                  </Link>
+                </li>
+              ))}
           </ul>
         </div>
       )}
